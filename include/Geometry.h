@@ -24,12 +24,12 @@ public:
 	inline bool castShadows() const { return castShadows_; }
 	inline void setCastShadows(bool castShadows) { castShadows_ = castShadows; }
 
-	inline const Material &material() const { return *material_; }
-	inline void setMaterial(std::unique_ptr<Material> material) { material_ = std::move(material); }
+	inline const Material *material() const { return material_; }
+	inline void setMaterial(Material *material) { material_ = material; }
 
 protected:
 	bool castShadows_;
-	std::unique_ptr<Material> material_;
+	Material *material_;
 };
 
 }

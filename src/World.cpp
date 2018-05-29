@@ -5,6 +5,9 @@
 #include "RayCast.h"
 #include "Whitted.h"
 #include "PathTrace.h"
+#include "Geometry.h"
+#include "Material.h"
+#include "ShadeRecord.h"
 
 namespace pm {
 
@@ -19,6 +22,11 @@ World::World()
 void World::addObject(std::unique_ptr<Geometry> object)
 {
 	objects_.push_back(std::move(object));
+}
+
+void World::addMaterial(std::unique_ptr<Material> material)
+{
+	materials_.push_back(std::move(material));
 }
 
 void World::setAmbientLight(std::unique_ptr<Light> ambient)
@@ -46,7 +54,7 @@ ShadeRecord World::hitObjects(const Ray &ray) const
 		{
 			sr.hitAnObject = true;
 			tMin = t;
-			sr.material = &objects_[i]->material();
+			sr.material = objects_[i]->material();
 			sr.hitPoint = ray.o + t * ray.d;
 			normal = sr.normal;
 			localHitPoint = sr.localHitPoint;

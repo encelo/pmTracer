@@ -2,6 +2,7 @@
 #include "Sampler.h"
 #include "World.h"
 #include "Regular.h"
+#include "Geometry.h"
 
 namespace pm {
 

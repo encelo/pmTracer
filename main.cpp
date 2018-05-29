@@ -43,7 +43,6 @@
 const int width = 1280;
 const int height = 720;
 const int tileSize = 16;
-const int maxNumThreads = 32;
 
 void threadFunc(int id, int numThreads, pm::World &world, pm::Camera &camera, pm::RGBColor *frame)
 {
@@ -129,8 +128,9 @@ void setupWorld(pm::World &world)
 	//white->setSpecularExp(32.0f);
 	white->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
 	white->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	plane->setMaterial(std::move(white));
+	plane->setMaterial(white.get());
 	world.addObject(std::move(plane));
+	world.addMaterial(std::move(white));
 
 	auto sphere1 = std::make_unique<pm::Sphere>(pm::Vector3(0.0, 1.0, 0.0), 1.0);
 	auto red = std::make_unique<pm::Phong>();
@@ -141,8 +141,9 @@ void setupWorld(pm::World &world)
 	red->setSpecularExp(32.0f);
 	red->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
 	red->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	sphere1->setMaterial(std::move(red));
+	sphere1->setMaterial(red.get());
 	world.addObject(std::move(sphere1));
+	world.addMaterial(std::move(red));
 
 	auto sphere2 = std::make_unique<pm::Sphere>(pm::Vector3(2.0, 0.5, 0.0), 0.5);
 	auto green = std::make_unique<pm::Phong>();
@@ -153,8 +154,9 @@ void setupWorld(pm::World &world)
 	green->setSpecularExp(32.0f);
 	green->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
 	green->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	sphere2->setMaterial(std::move(green));
+	sphere2->setMaterial(green.get());
 	world.addObject(std::move(sphere2));
+	world.addMaterial(std::move(green));
 
 	auto sphere3 = std::make_unique<pm::Sphere>(pm::Vector3(-2.0, 2.0, 0.0), 0.75);
 	auto blue = std::make_unique<pm::Phong>();
@@ -165,8 +167,9 @@ void setupWorld(pm::World &world)
 	blue->setSpecularExp(24.0f);
 	blue->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
 	blue->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	sphere3->setMaterial(std::move(blue));
+	sphere3->setMaterial(blue.get());
 	world.addObject(std::move(sphere3));
+	world.addMaterial(std::move(blue));
 
 #if POINT_LIGHTS
 	auto light1 = std::make_unique<pm::PointLight>(0.0, 2.0, -2.0);
@@ -235,16 +238,18 @@ void setupWorld(pm::World &world)
 	auto emissive = std::make_unique<pm::Emissive>();
 	emissive->setRadianceScale(0.25f);
 	//emissive->setCe(1.0f, 0.0f, 0.0f);
-	object->setMaterial(std::move(emissive));
+	object->setMaterial(emissive.get());
 	world.addObject(std::move(object));
+	world.addMaterial(std::move(emissive));
 
 	auto object2 = std::make_unique<pm::Rectangle>(pm::Vector3(-4, 0.0, 0.5), pm::Vector3(0.0, 1.0, 0.0), pm::Vector3(0.0, 0.0, 1.0), pm::Vector3(1.0, 0.0, 0.0));
 	object2->setSampler(std::make_unique<pm::Hammersley>(64));
 	auto emissive2 = std::make_unique<pm::Emissive>();
 	emissive2->setRadianceScale(0.2f);
 	//emissive2->setCe(1.0f, 0.0f, 0.0f);
-	object2->setMaterial(std::move(emissive2));
+	object2->setMaterial(emissive2.get());
 	world.addObject(std::move(object2));
+	world.addMaterial(std::move(emissive2));
 #endif
 }
 
@@ -253,167 +258,101 @@ void setupCornellBox(pm::World &world)
 	world.setTracer(std::make_unique<pm::PathTrace>(world));
 
 	world.viewPlane().setDimensions(width, height);
-	world.viewPlane().setSampler(std::make_unique<pm::NRooks>(9));
+	world.viewPlane().setSampler(std::make_unique<pm::NRooks>(4));
 	world.viewPlane().setMaxDepth(5);
 
-	// Walls
-	auto floor = std::make_unique<pm::Rectangle>(pm::Vector3(0.0, 0.0, 0.0), pm::Vector3(552.8, 0.0, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(0.0, 1.0, 0.0));
-	auto floorMat = std::make_unique<pm::Matte>();
-	floorMat->setCd(1.0f, 1.0f, 1.0f);
-	//floorMat->setKa(0.25f);
-	//floorMat->setKd(0.45f);
-	floorMat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	floorMat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	floor->setMaterial(std::move(floorMat));
-	world.addObject(std::move(floor));
+	// Materials
+	auto white = world.createMaterial<pm::Matte>();
+	white->setCd(1.0f, 1.0f, 1.0f);
+	white->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
+	white->diffuse().sampler().mapSamplesToHemisphere(1.0f);
 
-	auto ceiling = std::make_unique<pm::Rectangle>(pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(556.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(0.0, -1.0, 0.0));
-	auto ceilingMat = std::make_unique<pm::Matte>();
-	ceilingMat->setCd(1.0f, 1.0f, 1.0f);
-	//ceilingMat->setKa(0.25f);
-	//ceilingMat->setKd(0.45f);
-	ceilingMat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	ceilingMat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	ceiling->setMaterial(std::move(ceilingMat));
-	world.addObject(std::move(ceiling));
+	auto red = world.createMaterial<pm::Matte>();
+	red->setCd(1.0f, 0.0f, 0.0f);
+	red->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
+	red->diffuse().sampler().mapSamplesToHemisphere(1.0f);
 
-	auto leftWall = std::make_unique<pm::Rectangle>(pm::Vector3(552.8, 0.0, 0.0), pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(-1.0, 0.0, 0.0));
-	auto leftWallMat = std::make_unique<pm::Matte>();
-	leftWallMat->setCd(1.0f, 0.0f, 0.0f);
-	//leftWallMat->setKa(0.25f);
-	//leftWallMat->setKd(0.45f);
-	leftWallMat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	leftWallMat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	leftWall->setMaterial(std::move(leftWallMat));
-	world.addObject(std::move(leftWall));
+	auto green = world.createMaterial<pm::Matte>();
+	green->setCd(0.0f, 1.0f, 0.0f);
+	green->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
+	green->diffuse().sampler().mapSamplesToHemisphere(1.0f);
 
-	auto rightWall = std::make_unique<pm::Rectangle>(pm::Vector3(0.0, 0.0, 0.0), pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(1.0, 0.0, 0.0));
-	auto rightWallMat = std::make_unique<pm::Matte>();
-	rightWallMat->setCd(0.0f, 1.0f, 0.0f);
-	//rightWallMat->setKa(0.25f);
-	//rightWallMat->setKd(0.45f);
-	rightWallMat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	rightWallMat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	rightWall->setMaterial(std::move(rightWallMat));
-	world.addObject(std::move(rightWall));
+	auto emissive = world.createMaterial<pm::Emissive>();
 
-	auto backWall = std::make_unique<pm::Rectangle>(pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(556.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, -1.0));
-	auto backWallMat = std::make_unique<pm::Matte>();
-	backWallMat->setCd(1.0f, 1.0f, 1.0f);
-	//backWallMat->setKa(0.25f);
-	//backWallMat->setKd(0.45f);
-	backWallMat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	backWallMat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	backWall->setMaterial(std::move(backWallMat));
-	world.addObject(std::move(backWall));
-
-	auto light = std::make_unique<pm::Rectangle>(pm::Vector3(213.0, 548.0, 227.0), pm::Vector3(343.0-213.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 332.0-227.0), pm::Vector3(0.0, -1.0, 0.0));
+	// Light
+	auto light = world.createObject<pm::Rectangle>(pm::Vector3(213.0, 548.0, 227.0), pm::Vector3(343.0-213.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 332.0-227.0), pm::Vector3(0.0, -1.0, 0.0));
 	light->setSampler(std::make_unique<pm::Hammersley>(64));
-	auto emissive = std::make_unique<pm::Emissive>();
-	emissive->setRadianceScale(1.0f);
-	//emissive->setCe(1.0f, 0.0f, 0.0f);
-	light->setMaterial(std::move(emissive));
-	world.addObject(std::move(light));
+	light->setMaterial(emissive);
 
-/*
-	auto sphere = std::make_unique<pm::Sphere>(pm::Vector3(552.8 / 2 + 125, 100.0, 559.2 / 2.0), 100.0);
-	auto sphereMat = std::make_unique<pm::Phong>();
-	sphereMat->setCd(1.0f, 1.0f, 1.0f);
-	sphereMat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	sphereMat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	sphere->setMaterial(std::move(sphereMat));
-	world.addObject(std::move(sphere));
+	// Walls
+	auto floor = world.createObject<pm::Rectangle>(pm::Vector3(0.0, 0.0, 0.0), pm::Vector3(552.8, 0.0, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(0.0, 1.0, 0.0));
+	floor->setMaterial(white);
 
-	auto sphere2 = std::make_unique<pm::Sphere>(pm::Vector3(552.8 / 2 - 125, 100.0, 559.2 / 2.0), 100.0);
-	auto sphere2Mat = std::make_unique<pm::Phong>();
-	sphere2Mat->setCd(1.0f, 1.0f, 1.0f);
-	sphere2Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	sphere2Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	sphere2->setMaterial(std::move(sphere2Mat));
-	world.addObject(std::move(sphere2));
-*/
+	auto ceiling = world.createObject<pm::Rectangle>(pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(556.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(0.0, -1.0, 0.0));
+	ceiling->setMaterial(white);
+
+	auto leftWall = world.createObject<pm::Rectangle>(pm::Vector3(552.8, 0.0, 0.0), pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(-1.0, 0.0, 0.0));
+	leftWall->setMaterial(red);
+
+	auto rightWall = world.createObject<pm::Rectangle>(pm::Vector3(0.0, 0.0, 0.0), pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(1.0, 0.0, 0.0));
+	rightWall->setMaterial(green);
+
+	auto backWall = world.createObject<pm::Rectangle>(pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(556.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, -1.0));
+	backWall->setMaterial(white);
 
 	// Short object
 	auto short1 = rectangleFromVertices(pm::Vector3(130.0, 165.0, 65.0), pm::Vector3(82.0, 165.0, 225.0), pm::Vector3(290.0, 165.0, 114.0));
-	auto short1Mat = std::make_unique<pm::Phong>();
-	short1Mat->setCd(1.0f, 1.0f, 1.0f);
-	short1Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	short1Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	short1->setMaterial(std::move(short1Mat));
+	short1->setMaterial(white);
 	world.addObject(std::move(short1));
 
 	auto short2 = rectangleFromVertices(pm::Vector3(290.0, 0.0, 114.0), pm::Vector3(290.0, 165.0, 114.0), pm::Vector3(240.0, 0.0, 272.0));
-	auto short2Mat = std::make_unique<pm::Phong>();
-	short2Mat->setCd(1.0f, 1.0f, 1.0f);
-	short2Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	short2Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	short2->setMaterial(std::move(short2Mat));
+	short2->setMaterial(white);
 	world.addObject(std::move(short2));
 
 	auto short3 = rectangleFromVertices(pm::Vector3(130, 0.0, 65.0), pm::Vector3(130.0, 165.0, 65.0), pm::Vector3(290.0, 0.0, 114.0));
-	auto short3Mat = std::make_unique<pm::Phong>();
-	short3Mat->setCd(1.0f, 1.0f, 1.0f);
-	short3Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	short3Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	short3->setMaterial(std::move(short3Mat));
+	short3->setMaterial(white);
 	world.addObject(std::move(short3));
 
 	auto short4 = rectangleFromVertices(pm::Vector3(82.0, 0.0, 225.0), pm::Vector3(82.0, 165.0, 225.0), pm::Vector3(130.0, 0.0, 65.0));
-	auto short4Mat = std::make_unique<pm::Phong>();
-	short4Mat->setCd(1.0f, 1.0f, 1.0f);
-	short4Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	short4Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	short4->setMaterial(std::move(short4Mat));
+	short4->setMaterial(white);
 	world.addObject(std::move(short4));
 
 	auto short5 = rectangleFromVertices(pm::Vector3(240.0, 0.0, 272.0), pm::Vector3(240.0, 165.0, 272.0), pm::Vector3(82.0, 0.0, 225.0));
-	auto short5Mat = std::make_unique<pm::Phong>();
-	short5Mat->setCd(1.0f, 1.0f, 1.0f);
-	short5Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	short5Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	short5->setMaterial(std::move(short5Mat));
+	short5->setMaterial(white);
 	world.addObject(std::move(short5));
 
 	// Tall object
 	auto tall1 = rectangleFromVertices(pm::Vector3(423.0, 330.0, 247.0), pm::Vector3(265.0, 330.0, 296.0), pm::Vector3(472.0, 330.0, 406.0));
-	auto tall1Mat = std::make_unique<pm::Phong>();
-	tall1Mat->setCd(1.0f, 1.0f, 1.0f);
-	tall1Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	tall1Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	tall1->setMaterial(std::move(tall1Mat));
+	tall1->setMaterial(white);
 	world.addObject(std::move(tall1));
 
 	auto tall2 = rectangleFromVertices(pm::Vector3(423.0, 0.0, 247.0), pm::Vector3(423.0, 330.0, 247.0), pm::Vector3(472.0, 0.0, 406.0));
-	auto tallt2Mat = std::make_unique<pm::Phong>();
-	tallt2Mat->setCd(1.0f, 1.0f, 1.0f);
-	tallt2Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	tallt2Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	tall2->setMaterial(std::move(tallt2Mat));
+	tall2->setMaterial(white);
 	world.addObject(std::move(tall2));
 
 	auto tall3 = rectangleFromVertices(pm::Vector3(472.0, 0.0, 406.0), pm::Vector3(472.0, 330.0, 406.0), pm::Vector3(314.0, 0.0, 456.0));
-	auto tall3Mat = std::make_unique<pm::Phong>();
-	tall3Mat->setCd(1.0f, 1.0f, 1.0f);
-	tall3Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	tall3Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	tall3->setMaterial(std::move(tall3Mat));
+	tall3->setMaterial(white);
 	world.addObject(std::move(tall3));
 
 	auto tall4 = rectangleFromVertices(pm::Vector3(314.0, 0.0, 456.0), pm::Vector3(314.0, 330.0, 456.0), pm::Vector3(265.0, 0.0, 296.0));
-	auto tall4Mat = std::make_unique<pm::Phong>();
-	tall4Mat->setCd(1.0f, 1.0f, 1.0f);
-	tall4Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	tall4Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	tall4->setMaterial(std::move(tall4Mat));
+	tall4->setMaterial(white);
 	world.addObject(std::move(tall4));
 
 	auto tall5 = rectangleFromVertices(pm::Vector3(265.0, 0.0, 296.0), pm::Vector3(265.0, 330.0, 296.0), pm::Vector3(423.0, 0.0, 247.0));
-	auto tall5Mat = std::make_unique<pm::Phong>();
-	tall5Mat->setCd(1.0f, 1.0f, 1.0f);
-	tall5Mat->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	tall5Mat->diffuse().sampler().mapSamplesToHemisphere(1.0f);
-	tall5->setMaterial(std::move(tall5Mat));
+	tall5->setMaterial(white);
 	world.addObject(std::move(tall5));
+}
+
+void validateWorld(const pm::World world)
+{
+	for (const auto &object : world.objects())
+	{
+		if (object->material() == nullptr)
+		{
+			std::cout << "Missing material!\n";
+			exit(-1);
+		}
+	}
 }
 
 int main()
@@ -450,7 +389,8 @@ int main()
 */
 
 	const unsigned int numThreads = std::thread::hardware_concurrency();
-	std::thread th[maxNumThreads];
+	std::vector<std::thread> threads;
+	threads.reserve(numThreads);
 
 	auto endTime = std::chrono::high_resolution_clock::now();
 	std::cout << "Scene setting time: ";
@@ -467,9 +407,9 @@ int main()
 			camera.renderScene(world, frame.get(), j, i, tileSize);
 #elif MULTI_THREAD_TILED
 	for (int i = 0; i < numThreads; i++)
-		th[i] = std::thread(threadFunc, i, numThreads, std::ref(world), std::ref(camera), frame.get());
+		threads.emplace_back(threadFunc, i, numThreads, std::ref(world), std::ref(camera), frame.get());
 	for (int i = 0; i < numThreads; i++)
-		th[i].join();
+		threads[i].join();
 #endif
 
 	endTime = std::chrono::high_resolution_clock::now();

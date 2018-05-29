@@ -4,13 +4,14 @@
 #include <memory>
 #include <vector>
 #include "ViewPlane.h"
-#include "Sphere.h"
 #include "Tracer.h"
 #include "Light.h"
 
 namespace pm {
 
 class RGBColor;
+class Geometry;
+class Material;
 
 class World
 {
@@ -27,11 +28,35 @@ public:
 	inline const std::vector<std::unique_ptr<Geometry>> &objects() const { return objects_; }
 	void addObject(std::unique_ptr<Geometry> object);
 
+	template<class T, typename... Args>
+	T* createObject(Args&&... args)
+	{
+		objects_.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+		return static_cast<T*>(objects_.back().get());
+	}
+
+	inline const std::vector<std::unique_ptr<Material>> &materials() const { return materials_; }
+	void addMaterial(std::unique_ptr<Material> material);
+
+	template<class T, typename... Args>
+	T* createMaterial(Args&&... args)
+	{
+		materials_.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+		return static_cast<T*>(materials_.back().get());
+	}
+
 	inline const Light &ambientLight() const { return *ambientLight_; }
 	inline Light &ambientLight() { return *ambientLight_; }
 	void setAmbientLight(std::unique_ptr<Light> ambient);
 	inline const std::vector<std::unique_ptr<Light>> &lights() const { return lights_; }
 	void addLight(std::unique_ptr<Light> light);
+
+	template<class T, typename... Args>
+	T* createLight(Args&&... args)
+	{
+		lights_.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+		return static_cast<T*>(lights_.back().get());
+	}
 
 	ShadeRecord hitObjects(const Ray &ray) const;
 
@@ -40,6 +65,7 @@ private:
 	RGBColor background_;
 	std::unique_ptr<Tracer> tracer_;
 	std::vector<std::unique_ptr<Geometry>> objects_;
+	std::vector<std::unique_ptr<Material>> materials_;
 	std::unique_ptr<Light> ambientLight_;
 	std::vector<std::unique_ptr<Light>> lights_;
 };

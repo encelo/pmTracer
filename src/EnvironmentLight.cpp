@@ -2,6 +2,7 @@
 #include "Emissive.h"
 #include "ShadeRecord.h"
 #include "World.h"
+#include "Geometry.h"
 #include "MultiJittered.h"
 
 namespace pm {
