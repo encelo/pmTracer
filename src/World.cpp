@@ -39,6 +39,12 @@ void World::addLight(std::unique_ptr<Light> light)
 	lights_.push_back(std::move(light));
 }
 
+void World::addSampler(std::unique_ptr<Sampler> sampler)
+{
+	samplers_.push_back(std::move(sampler));
+}
+
+
 ShadeRecord World::hitObjects(const Ray &ray) const
 {
 	ShadeRecord sr(*this);

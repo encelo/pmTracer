@@ -102,9 +102,13 @@ void setupWorld(pm::World &world)
 	//world.setTracer(std::make_unique<pm::AreaLighting>(world));
 	world.setTracer(std::make_unique<pm::PathTrace>(world));
 
+	auto vpSampler = world.createSampler<pm::NRooks>(256);
+
 	world.viewPlane().setDimensions(width, height);
-	//world.viewPlane().setSampler(std::make_unique<pm::NRooks>(256));
+	world.viewPlane().setSampler(vpSampler);
 	world.viewPlane().setMaxDepth(5);
+
+	auto hammersley = world.createSampler<pm::Hammersley>(256);
 
 #if AMBIENT
 	auto ambient = std::make_unique<pm::Ambient>();
@@ -126,8 +130,7 @@ void setupWorld(pm::World &world)
 	white->setKd(0.45f);
 	//white->setKs(0.25f);
 	//white->setSpecularExp(32.0f);
-	white->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	white->diffuse().sampler().mapSamplesToHemisphere(1.0f);
+	white->diffuse().setSampler(hammersley);
 	plane->setMaterial(white.get());
 	world.addObject(std::move(plane));
 	world.addMaterial(std::move(white));
@@ -139,8 +142,7 @@ void setupWorld(pm::World &world)
 	red->setKd(0.65f);
 	red->setKs(0.15f);
 	red->setSpecularExp(32.0f);
-	red->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	red->diffuse().sampler().mapSamplesToHemisphere(1.0f);
+	red->diffuse().setSampler(hammersley);
 	sphere1->setMaterial(red.get());
 	world.addObject(std::move(sphere1));
 	world.addMaterial(std::move(red));
@@ -152,8 +154,7 @@ void setupWorld(pm::World &world)
 	green->setKd(0.45f);
 	green->setKs(0.5f);
 	green->setSpecularExp(32.0f);
-	green->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	green->diffuse().sampler().mapSamplesToHemisphere(1.0f);
+	green->diffuse().setSampler(hammersley);
 	sphere2->setMaterial(green.get());
 	world.addObject(std::move(sphere2));
 	world.addMaterial(std::move(green));
@@ -165,8 +166,7 @@ void setupWorld(pm::World &world)
 	blue->setKd(0.75f);
 	blue->setKs(0.25f);
 	blue->setSpecularExp(24.0f);
-	blue->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	blue->diffuse().sampler().mapSamplesToHemisphere(1.0f);
+	blue->diffuse().setSampler(hammersley);
 	sphere3->setMaterial(blue.get());
 	world.addObject(std::move(sphere3));
 	world.addMaterial(std::move(blue));
@@ -234,7 +234,7 @@ void setupWorld(pm::World &world)
 	world.addLight(std::move(envlight));
 #elif PATH_TRACE
 	auto object = std::make_unique<pm::Rectangle>(pm::Vector3(-1, 3.0, -1), pm::Vector3(2.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 2.0), pm::Vector3(0.0, -1.0, 0.0));
-	object->setSampler(std::make_unique<pm::Hammersley>(64));
+	object->setSampler(hammersley);
 	auto emissive = std::make_unique<pm::Emissive>();
 	emissive->setRadianceScale(0.25f);
 	//emissive->setCe(1.0f, 0.0f, 0.0f);
@@ -243,7 +243,7 @@ void setupWorld(pm::World &world)
 	world.addMaterial(std::move(emissive));
 
 	auto object2 = std::make_unique<pm::Rectangle>(pm::Vector3(-4, 0.0, 0.5), pm::Vector3(0.0, 1.0, 0.0), pm::Vector3(0.0, 0.0, 1.0), pm::Vector3(1.0, 0.0, 0.0));
-	object2->setSampler(std::make_unique<pm::Hammersley>(64));
+	object2->setSampler(hammersley);
 	auto emissive2 = std::make_unique<pm::Emissive>();
 	emissive2->setRadianceScale(0.2f);
 	//emissive2->setCe(1.0f, 0.0f, 0.0f);
@@ -257,31 +257,32 @@ void setupCornellBox(pm::World &world)
 {
 	world.setTracer(std::make_unique<pm::PathTrace>(world));
 
+	auto vpSampler = world.createSampler<pm::NRooks>(16);
+
 	world.viewPlane().setDimensions(width, height);
-	world.viewPlane().setSampler(std::make_unique<pm::NRooks>(4));
+	world.viewPlane().setSampler(vpSampler);
 	world.viewPlane().setMaxDepth(5);
+
+	auto hammersley = world.createSampler<pm::Hammersley>(256);
 
 	// Materials
 	auto white = world.createMaterial<pm::Matte>();
 	white->setCd(1.0f, 1.0f, 1.0f);
-	white->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	white->diffuse().sampler().mapSamplesToHemisphere(1.0f);
+	white->diffuse().setSampler(hammersley);
 
 	auto red = world.createMaterial<pm::Matte>();
 	red->setCd(1.0f, 0.0f, 0.0f);
-	red->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	red->diffuse().sampler().mapSamplesToHemisphere(1.0f);
+	red->diffuse().setSampler(hammersley);
 
 	auto green = world.createMaterial<pm::Matte>();
 	green->setCd(0.0f, 1.0f, 0.0f);
-	green->diffuse().setSampler(std::make_unique<pm::Hammersley>(256));
-	green->diffuse().sampler().mapSamplesToHemisphere(1.0f);
+	green->diffuse().setSampler(hammersley);
 
 	auto emissive = world.createMaterial<pm::Emissive>();
 
 	// Light
 	auto light = world.createObject<pm::Rectangle>(pm::Vector3(213.0, 548.0, 227.0), pm::Vector3(343.0-213.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 332.0-227.0), pm::Vector3(0.0, -1.0, 0.0));
-	light->setSampler(std::make_unique<pm::Hammersley>(64));
+	light->setSampler(hammersley);
 	light->setMaterial(emissive);
 
 	// Walls
@@ -345,6 +346,12 @@ void setupCornellBox(pm::World &world)
 
 void validateWorld(const pm::World world)
 {
+	if (world.viewPlane().samplerState().sampler() == nullptr)
+	{
+		std::cout << "Missing viewplane sampler!\n";
+		exit(-1);
+	}
+
 	for (const auto &object : world.objects())
 	{
 		if (object->material() == nullptr)

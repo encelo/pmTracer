@@ -8,11 +8,38 @@ const double pi4 = 3.14159265358979323846 / 4.0;
 namespace pm {
 
 Sampler::Sampler(int numSamples)
-	: numSamples_(numSamples), numSets_(83), count_(0), jump_(0),
+	: numSamples_(numSamples), numSets_(83),
 	  rndFloatDist_(0.0f, 1.0f), rndIntDist_(0, std::numeric_limits<int>::max())
 {
 	samples_.reserve(numSamples_ * numSets_);
 	setupShuffleIndices();
+}
+
+Vector2 Sampler::sampleUnitSquare(unsigned long &count, int &jump)
+{
+	// Start of a new pixel
+	if (count % numSamples_ == 0)
+		jump = (rndIntDist_(rndGen_) % numSets_) * numSamples_;
+
+	return samples_[jump + shuffledIndices_[jump + count++ % numSamples_]];
+}
+
+Vector2 Sampler::sampleUnitDisk(unsigned long &count, int &jump)
+{
+	// Start of a new pixel
+	if (count % numSamples_ == 0)
+		jump = (rndIntDist_(rndGen_) % numSets_) * numSamples_;
+
+	return diskSamples_[jump + shuffledIndices_[jump + count++ % numSamples_]];
+}
+
+Vector3 Sampler::sampleHemisphere(unsigned long &count, int &jump)
+{
+	// Start of a new pixel
+	if (count % numSamples() == 0)
+		jump = (rndIntDist_(rndGen_) % numSets_) * numSamples_;
+
+	return hemisphereSamples_[jump + shuffledIndices_[jump + count++ % numSamples_]];
 }
 
 void Sampler::setupShuffleIndices()
@@ -33,35 +60,11 @@ void Sampler::setupShuffleIndices()
 	}
 }
 
-Vector2 Sampler::sampleUnitSquare()
-{
-	// Start of a new pixel
-	if (count_ % numSamples_ == 0)
-		jump_ = (rndIntDist_(rndGen_) % numSets_) * numSamples_;
-
-	return samples_[jump_ + shuffledIndices_[jump_ + count_++ % numSamples_]];
-}
-
-Vector2 Sampler::sampleUnitDisk(void)
-{
-	// Start of a new pixel
-	if (count_ % numSamples_ == 0)
-		jump_ = (rndIntDist_(rndGen_) % numSets_) * numSamples_;
-
-	return diskSamples_[jump_ + shuffledIndices_[jump_ + count_++ % numSamples_]];
-}
-
-Vector3 Sampler::sampleHemisphere(void)
-{
-	// Start of a new pixel
-	if (count_ % numSamples_ == 0)
-		jump_ = (rndIntDist_(rndGen_) % numSets_) * numSamples_;
-
-	return hemisphereSamples_[jump_ + shuffledIndices_[jump_ + count_++ % numSamples_]];
-}
-
 void Sampler::mapSamplesToDisk()
 {
+	if (diskSamples_.empty() == false)
+		return;
+
 	const int size = samples_.size();
 	float r, phi;
 	Vector2 sp;
@@ -115,12 +118,13 @@ void Sampler::mapSamplesToDisk()
 		diskSamples_[i].x = r * cos(phi);
 		diskSamples_[i].y = r * sin(phi);
 	}
-
-	samples_.erase(samples_.begin(), samples_.end());
 }
 
 void Sampler::mapSamplesToHemisphere(float e)
 {
+	if (hemisphereSamples_.empty() == false)
+		return;
+
 	const int size = samples_.size();
 	hemisphereSamples_.reserve(numSamples_ * numSets_);
 
@@ -133,8 +137,6 @@ void Sampler::mapSamplesToHemisphere(float e)
 
 		hemisphereSamples_.push_back(Vector3(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta));
 	}
-
-	samples_.erase(samples_.begin(), samples_.end());
 }
 
 }

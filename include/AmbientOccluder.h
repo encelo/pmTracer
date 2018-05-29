@@ -4,6 +4,7 @@
 #include <memory>
 #include "Light.h"
 #include "ShadeRecord.h"
+#include "SamplerState.h"
 
 namespace pm {
 
@@ -28,8 +29,8 @@ public:
 	inline const float &minAmount() const { return minAmount_; }
 	inline void setMinAmount(float minAmount) { minAmount_ = minAmount; }
 
-	inline Sampler &sampler() const { return *sampler_; }
-	void setSampler(std::unique_ptr<Sampler> sampler);
+	inline const SamplerState &samplerState() const { return samplerState_; }
+	void setSampler(Sampler *sampler);
 
 private:
 	mutable Vector3 u_;
@@ -40,7 +41,7 @@ private:
 	RGBColor color_;
 	float minAmount_;
 
-	std::unique_ptr<Sampler> sampler_;
+	SamplerState samplerState_;
 };
 
 }

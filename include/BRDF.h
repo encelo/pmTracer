@@ -3,12 +3,14 @@
 
 #include <memory>
 #include "RGBColor.h"
+#include "SamplerState.h"
 #include "Sampler.h"
 
 namespace pm {
 
 class ShadeRecord;
 class Vector3;
+class Sampler;
 
 class BRDF
 {
@@ -20,11 +22,11 @@ public:
 	virtual RGBColor sampleF(const ShadeRecord &sr, const Vector3& wo, Vector3& wi, float& pdf) const { return RGBColor(0.0f, 0.0f, 0.0f); }
 	virtual RGBColor rho(const ShadeRecord &sr, const Vector3 &wo) const { return RGBColor(0.0f, 0.0f, 0.0f); }
 
-	inline Sampler &sampler() const { return *sampler_; }
-	inline void setSampler(std::unique_ptr<Sampler> sampler) { sampler_ = std::move(sampler); }
+	inline SamplerState &samplerState() { return samplerState_; }
+	void setSampler(Sampler *sampler);
 
 protected:
-	std::unique_ptr<Sampler> sampler_;
+	SamplerState samplerState_;
 };
 
 }

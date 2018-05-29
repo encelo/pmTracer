@@ -4,6 +4,7 @@
 #include "Geometry.h"
 #include "Vector3.h"
 #include "Ray.h"
+#include "SamplerState.h"
 
 namespace pm {
 
@@ -24,8 +25,8 @@ public:
 	inline float pdf(ShadeRecord &sr) const override { return (invArea_); }
 	inline Vector3 normal(const Vector3 &p) const { return normal_; }
 
-	inline Sampler &sampler() const { return *sampler_; }
-	inline void setSampler(std::unique_ptr<Sampler> sampler) { sampler_ = std::move(sampler); }
+	inline const SamplerState &samplerState() const { return samplerState_; }
+	inline void setSampler(Sampler *sampler) { samplerState_.setSampler(sampler); }
 
 private:
 	static constexpr double Epsilon = 0.000000001;
@@ -38,7 +39,7 @@ private:
 	/// Side
 	Vector3 b_;
 	Vector3 normal_;
-	std::unique_ptr<Sampler> sampler_;
+	SamplerState samplerState_;
 
 	float aSquaredLength_;
 	float bSquaredLength_;

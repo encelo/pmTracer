@@ -17,7 +17,7 @@ Rectangle::Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b)
 }
 
 Rectangle::Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b, const Vector3 &normal)
-	: Geometry(), point_(point), a_(a), b_(b), normal_(normal), sampler_(std::make_unique<Hammersley>(16))
+	: Geometry(), point_(point), a_(a), b_(b), normal_(normal)
 {
 	normal_.normalize();
 
@@ -78,7 +78,7 @@ bool Rectangle::shadowHit(const Ray &ray, double &tMin) const
 
 Vector3 Rectangle::sample(void) const
 {
-	Vector2 sp = sampler_->sampleUnitSquare();
+	Vector2 sp = samplerState_.sampleUnitSquare();
 	return Vector3(point_ + sp.x * a_ + sp.y * b_);
 }
 

@@ -2,15 +2,17 @@
 #define PMTRACER_VIEWPLANE_H
 
 #include <memory>
-#include "Regular.h"
+#include "SamplerState.h"
 
 namespace pm {
+
+class Sampler;
 
 class ViewPlane
 {
 public:
 	ViewPlane() : width_(1920), height_(1080), pixelSize_(1.0f), gamma_(1.0f),
-	  invGamma_(1.0f / gamma_), maxDepth_(1), sampler_(std::make_unique<Regular>(1)) { }
+	  invGamma_(1.0f / gamma_), maxDepth_(1) { }
 
 	inline int width() const { return width_; }
 	inline void setWidth(int width) { width_ = width; }
@@ -25,8 +27,9 @@ public:
 	inline int maxDepth() const { return maxDepth_; }
 	inline void setMaxDepth(int maxDepth) { maxDepth_ = maxDepth; }
 
-	inline Sampler &sampler() const { return *sampler_; }
-	inline void setSampler(std::unique_ptr<Sampler> sampler) { sampler_ = std::move(sampler); }
+	inline SamplerState &samplerState() { return samplerState_; }
+	inline const SamplerState &samplerState() const { return samplerState_; }
+	inline void setSampler(Sampler *sampler) { samplerState_.setSampler(sampler); }
 
 private:
 	int width_;
@@ -35,7 +38,7 @@ private:
 	float gamma_;
 	float invGamma_;
 	int maxDepth_;
-	std::unique_ptr<Sampler> sampler_;
+	SamplerState samplerState_;
 };
 
 }

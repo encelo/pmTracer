@@ -14,18 +14,19 @@ public:
 	Sampler(int numSamples);
 	virtual ~Sampler() { }
 
+	/// Returns next sample on unit square
+	Vector2 sampleUnitSquare(unsigned long &count, int &jump);
+	/// Returns next sample on unit disk
+	Vector2 sampleUnitDisk(unsigned long &count, int &jump);
+	/// Returns next sample on hemisphere
+	Vector3 sampleHemisphere(unsigned long &count, int &jump);
+
 	/// Generates sample patterns in a unit square
 	virtual void generateSamples() = 0;
 	/// Sets up the randomly shuffled indices
 	void setupShuffleIndices();
 	/// Randomly shuffles the samples in each pattern
 	void shuffleSamples();
-	/// Returns next sample on unit square
-	Vector2 sampleUnitSquare();
-	/// Returns next sample on unit disk
-	Vector2 sampleUnitDisk();
-	/// Returns next sample on hemisphere
-	Vector3 sampleHemisphere();
 
 	inline int numSamples() const { return numSamples_; }
 
@@ -45,10 +46,6 @@ protected:
 	std::vector<Vector3> hemisphereSamples_;
 	/// Shuffled samples array indices
 	std::vector<int> shuffledIndices_;
-	/// The current number of sample points used
-	unsigned long count_;
-	/// Random index jump
-	int jump_;
 
 	std::default_random_engine rndGen_;
 	std::uniform_real_distribution<float> rndFloatDist_;

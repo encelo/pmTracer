@@ -12,20 +12,21 @@ void Ortographic::renderScene(World &world, RGBColor *frame, int startX, int sta
 	const ViewPlane &vp = world.viewPlane();
 	const double zw = 100.0; // hard-coded
 
+	const int numSamples = vp.samplerState().numSamples();
 	for (int r = startY; r < startY + tileHeight; r++)
 	{
 		for (int c = startX; c < startX + tileWidth; c++)
 		{
 			RGBColor pixel(0.0f, 0.0f, 0.0f);
-			for (int j = 0; j < vp.sampler().numSamples(); j++)
+			for (int j = 0; j < numSamples; j++)
 			{
-				const Vector2 sp = vp.sampler().sampleUnitSquare();
+				const Vector2 sp = vp.samplerState().sampleUnitSquare();
 				const double x = vp.pixelSize() * (c - 0.5 * vp.width() + sp.x);
 				const double y = vp.pixelSize() * (r - 0.5 * vp.height() + sp.y);
 				ray.o = Vector3(x, y, zw);
 				pixel += world.tracer().traceRay(ray, 0);
 			}
-			pixel /= vp.sampler().numSamples();
+			pixel /= numSamples;
 			frame[r * vp.width() + c] = pixel;
 		}
 	}

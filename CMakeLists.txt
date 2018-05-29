@@ -13,6 +13,7 @@ set(SOURCES
 	src/AreaLighting.cpp
 	src/PathTrace.cpp
 	src/Sampler.cpp
+	src/SamplerState.cpp
 	src/Regular.cpp
 	src/PureRandom.cpp
 	src/Jittered.cpp
@@ -23,6 +24,7 @@ set(SOURCES
 	src/Camera.cpp
 	src/Ortographic.cpp
 	src/PinHole.cpp
+	src/BRDF.cpp
 	src/Matte.cpp
 	src/Phong.cpp
 	src/Reflective.cpp

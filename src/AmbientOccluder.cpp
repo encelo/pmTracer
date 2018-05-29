@@ -3,20 +3,20 @@
 #include "World.h"
 #include "Regular.h"
 #include "Geometry.h"
+#include "Sampler.h"
 
 namespace pm {
 
 AmbientOccluder::AmbientOccluder()
 	: Light(), u_(1.0, 0.0, 0.0), v_(0.0, 1.0, 0.0), w_(0.0, 0.0, 1.0),
-	  ls_(1.0f), color_(1.0f, 1.0f, 1.0), minAmount_(1.0f),
-	  sampler_(std::make_unique<Regular>(1))
+	  ls_(1.0f), color_(1.0f, 1.0f, 1.0), minAmount_(1.0f)
 {
 
 }
 
 Vector3 AmbientOccluder::direction(ShadeRecord &sr) const
 {
-	Vector3 sp = sampler_->sampleHemisphere();
+	Vector3 sp = samplerState_.sampleHemisphere();
 	return Vector3(sp.x * u_ + sp.y * w_ + sp.z * w_);
 }
 
@@ -50,10 +50,10 @@ inline bool AmbientOccluder::inShadow(const Ray &ray, const ShadeRecord &sr) con
 	return false;
 }
 
-void AmbientOccluder::setSampler(std::unique_ptr<Sampler> sampler)
+void AmbientOccluder::setSampler(Sampler *sampler)
 {
-	sampler_ = std::move(sampler);
-	sampler_->mapSamplesToHemisphere(1.0f);
+	samplerState_.setSampler(sampler);
+	sampler->mapSamplesToHemisphere(1.0f);
 }
 
 }

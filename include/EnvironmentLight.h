@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "Light.h"
+#include "SamplerState.h"
 
 namespace pm {
 
@@ -19,14 +20,14 @@ public:
 	RGBColor L(ShadeRecord &sr) const override;
 	bool inShadow(const Ray &ray, const ShadeRecord &sr) const override;
 
-	inline Sampler &sampler() const { return *sampler_; }
-	inline void setSampler(std::unique_ptr<Sampler> sampler) { sampler_ = std::move(sampler); }
+	inline const SamplerState &sampler() const { return samplerState_; }
+	inline void setSampler(Sampler *sampler);
 
 	inline Emissive &material() const { return *material_; }
 	inline void setMaterial(std::unique_ptr<Emissive> material) { material_ = std::move(material); }
 
 private:
-	std::unique_ptr<Sampler> sampler_;
+	SamplerState samplerState_;
 	/// An emissive material
 	std::unique_ptr<Emissive> material_;
 	mutable Vector3 u_;

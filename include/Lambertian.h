@@ -42,7 +42,7 @@ inline RGBColor Lambertian::sampleF(const ShadeRecord &sr, const Vector3 &wo, Ve
 	v.normalize();
 	Vector3 u = cross(v, w);
 
-	Vector3 sp = sampler_->sampleHemisphere();
+	Vector3 sp = samplerState_.sampleHemisphere();
 	wi = sp.x * u + sp.y * v + sp.z * w;
 	wi.normalize();
 
