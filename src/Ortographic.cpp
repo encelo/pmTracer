@@ -1,0 +1,34 @@
+#include "Ortographic.h"
+#include "Ray.h"
+#include "RGBColor.h"
+#include "World.h"
+
+namespace pm {
+
+void Ortographic::renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight)
+{
+	Ray ray;
+	ray.d = Vector3(0.0, 0.0, -1.0);
+	const ViewPlane &vp = world.viewPlane();
+	const double zw = 100.0; // hard-coded
+
+	for (int r = startY; r < startY + tileHeight; r++)
+	{
+		for (int c = startX; c < startX + tileWidth; c++)
+		{
+			RGBColor pixel(0.0f, 0.0f, 0.0f);
+			for (int j = 0; j < vp.sampler().numSamples(); j++)
+			{
+				const Vector2 sp = vp.sampler().sampleUnitSquare();
+				const double x = vp.pixelSize() * (c - 0.5 * vp.width() + sp.x);
+				const double y = vp.pixelSize() * (r - 0.5 * vp.height() + sp.y);
+				ray.o = Vector3(x, y, zw);
+				pixel += world.tracer().traceRay(ray, 0);
+			}
+			pixel /= vp.sampler().numSamples();
+			frame[r * vp.width() + c] = pixel;
+		}
+	}
+}
+
+}
