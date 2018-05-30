@@ -9,7 +9,7 @@ namespace pm {
 class Directional: public Light
 {
 public:
-	Directional(double x, double y, double z) : Light(), ls_(1.0f), color_(1.0f, 1.0f, 1.0f), direction_(x, y, z) { }
+	Directional(float x, float y, float z) : Light(), ls_(1.0f), color_(1.0f, 1.0f, 1.0f), direction_(x, y, z) { }
 
 	inline Vector3 direction(ShadeRecord &sr) const override { return direction_; }
 	inline RGBColor L(ShadeRecord &sr) const override { return (ls_ * color_); }
@@ -23,7 +23,7 @@ public:
 	inline void setColor(float r, float g, float b) { color_.set(r, g, b); }
 
 	inline void setDirection(const Vector3 &direction) { direction_ = direction.normalized(); }
-	inline void setDirection(double x, double y, double z) { direction_.set(x, y, z); direction_.normalize(); }
+	inline void setDirection(float x, float y, float z) { direction_.set(x, y, z); direction_.normalize(); }
 
 protected:
 	float ls_;
@@ -33,7 +33,7 @@ protected:
 
 inline bool Directional::inShadow(const Ray &ray, const ShadeRecord &sr) const
 {
-	double t;
+	float t;
 	const size_t numObjects = sr.w.objects().size();
 
 	for (int i = 0; i < numObjects; i++)

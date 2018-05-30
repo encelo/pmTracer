@@ -23,8 +23,8 @@ void PinHole::renderScene(World &world, RGBColor *frame, int startX, int startY,
 			for (int j = 0; j < numSamples; j++)
 			{
 				const Vector2 sp = vp.samplerState().sampleUnitSquare();
-				const double x = pixelSize * (c - 0.5 * vp.width() + sp.x);
-				const double y = pixelSize * (r - 0.5 * vp.height() + sp.y);
+				const float x = pixelSize * (c - 0.5 * vp.width() + sp.x);
+				const float y = pixelSize * (r - 0.5 * vp.height() + sp.y);
 				ray.d = rayDirection(x, y);
 				pixel += world.tracer().traceRay(ray, depth);
 			}
@@ -35,7 +35,7 @@ void PinHole::renderScene(World &world, RGBColor *frame, int startX, int startY,
 	}
 }
 
-Vector3 PinHole::rayDirection(double x, double y) const
+Vector3 PinHole::rayDirection(float x, float y) const
 {
 	Vector3 dir = x * u_ + y * v_ - distance_ * w_;
 	dir.normalize();

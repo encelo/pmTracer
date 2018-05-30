@@ -3,20 +3,20 @@
 
 namespace pm {
 
-bool Sphere::hit(const Ray &ray, double &tMin, ShadeRecord &sr) const
+bool Sphere::hit(const Ray &ray, float &tMin, ShadeRecord &sr) const
 {
 	bool hasHit = false;
-	double t = 0.0;
+	float t = 0.0;
 	Vector3 temp = ray.o - center_;
-	double a = dot(ray.d, ray.d);
-	double b = 2.0 * dot(temp, ray.d);
-	double c = dot(temp, temp) - radius_ * radius_;
-	double disc = b * b - 4.0 * a * c;
+	float a = dot(ray.d, ray.d);
+	float b = 2.0 * dot(temp, ray.d);
+	float c = dot(temp, temp) - radius_ * radius_;
+	float disc = b * b - 4.0 * a * c;
 
 	if (disc > 0.0)
 	{
-		double e = sqrt(disc);
-		double denom = 2.0 * a;
+		float e = sqrt(disc);
+		float denom = 2.0 * a;
 
 		t = (-b - e) / denom; // smaller root
 		if (t > Epsilon)
@@ -42,23 +42,23 @@ bool Sphere::hit(const Ray &ray, double &tMin, ShadeRecord &sr) const
 	return hasHit;
 }
 
-bool Sphere::shadowHit(const Ray &ray, double &tMin) const
+bool Sphere::shadowHit(const Ray &ray, float &tMin) const
 {
 	if (castShadows_ == false)
 		return false;
 
 	bool hasHit = false;
-	double t = 0.0;
+	float t = 0.0;
 	Vector3 temp = ray.o - center_;
-	double a = dot(ray.d, ray.d);
-	double b = 2.0 * dot(temp, ray.d);
-	double c = dot(temp, temp) - radius_ * radius_;
-	double disc = b * b - 4.0 * a * c;
+	float a = dot(ray.d, ray.d);
+	float b = 2.0 * dot(temp, ray.d);
+	float c = dot(temp, temp) - radius_ * radius_;
+	float disc = b * b - 4.0 * a * c;
 
 	if (disc > 0.0)
 	{
-		double e = sqrt(disc);
-		double denom = 2.0 * a;
+		float e = sqrt(disc);
+		float denom = 2.0 * a;
 
 		t = (-b - e) / denom; // smaller root
 		if (t > ShadowEpsilon)

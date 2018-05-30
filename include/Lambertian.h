@@ -4,7 +4,7 @@
 #include "BRDF.h"
 #include "ShadeRecord.h"
 
-const double invPi = 1.0 / 3.14159265358979323846;
+const float invPi = 1.0 / 3.14159265358979323846;
 
 namespace pm {
 

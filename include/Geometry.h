@@ -14,8 +14,8 @@ public:
 	Geometry() : castShadows_(true) { }
 	virtual ~Geometry() { }
 
-	virtual bool hit(const Ray &ray, double &tMin, ShadeRecord &sr) const = 0;
-	virtual bool shadowHit(const Ray &ray, double &tMin) const = 0;
+	virtual bool hit(const Ray &ray, float &tMin, ShadeRecord &sr) const = 0;
+	virtual bool shadowHit(const Ray &ray, float &tMin) const = 0;
 
 	virtual Vector3 sample(void) const { return Vector3(0.0, 0.0, 0.0); }
 	virtual float pdf(ShadeRecord &sr) const { return 1.0f; }

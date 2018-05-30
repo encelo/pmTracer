@@ -9,7 +9,7 @@ namespace pm {
 class PointLight: public Light
 {
 public:
-	PointLight(double x, double y, double z) : Light(), ls_(1.0f), color_(1.0f, 1.0f, 1.0f), location_(x, y, z) { }
+	PointLight(float x, float y, float z) : Light(), ls_(1.0f), color_(1.0f, 1.0f, 1.0f), location_(x, y, z) { }
 
 	inline Vector3 direction(ShadeRecord &sr) const override { return (location_ - sr.hitPoint).normalize(); }
 	inline RGBColor L(ShadeRecord &sr) const override { return (ls_ * color_); }
@@ -24,7 +24,7 @@ public:
 
 	inline const Vector3 &location() const { return location_; }
 	inline void setLocation(const Vector3 &location) { location_ = location; }
-	inline void setLocation(double x, double y, double z) { location_.set(x, y, z); }
+	inline void setLocation(float x, float y, float z) { location_.set(x, y, z); }
 
 private:
 	float ls_;
@@ -34,7 +34,7 @@ private:
 
 inline bool PointLight::inShadow(const Ray &ray, const ShadeRecord &sr) const
 {
-	double t;
+	float t;
 	const size_t numObjects = sr.w.objects().size();
 	float d = (location_ - ray.o).length();
 

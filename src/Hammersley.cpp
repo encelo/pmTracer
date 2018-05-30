@@ -20,14 +20,14 @@ void Hammersley::generateSamples()
 	}
 }
 
-double Hammersley::phi(int i)
+float Hammersley::phi(int i)
 {
-	double x = 0.0;
-	double f = 0.5;
+	float x = 0.0;
+	float f = 0.5;
 
 	while (i)
 	{
-		x += f * static_cast<double>(i % 2);
+		x += f * static_cast<float>(i % 2);
 		i /= 2;
 		f *= 0.5;
 	}

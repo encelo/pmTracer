@@ -2,8 +2,8 @@
 #include <algorithm>
 #include "Sampler.h"
 
-const double pi = 3.14159265358979323846;
-const double pi4 = 3.14159265358979323846 / 4.0;
+const float pi = 3.14159265358979323846;
+const float pi4 = 3.14159265358979323846 / 4.0;
 
 namespace pm {
 

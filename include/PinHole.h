@@ -12,7 +12,7 @@ public:
 	PinHole() : Camera(), distance_(1.0f), zoom_(1.0f) { }
 
 	inline void setViewDistance(float distance) { distance_ = distance; }
-	Vector3 rayDirection(double x, double y) const;
+	Vector3 rayDirection(float x, float y) const;
 
 	using Camera::renderScene;
 	void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight) override;

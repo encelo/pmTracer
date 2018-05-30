@@ -30,7 +30,7 @@ public:
 	/// For area lights
 	Vector3 dir;
 	/// Ray parameter
-	double t;
+	float t;
 	/// Reference to the world
 	const World &w;
 

@@ -28,9 +28,9 @@ Rectangle::Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b, c
 	bSquaredLength_ = b.sqrLength();
 }
 
-bool Rectangle::hit(const Ray &ray, double &tMin, ShadeRecord &sr) const
+bool Rectangle::hit(const Ray &ray, float &tMin, ShadeRecord &sr) const
 {
-	double t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
+	float t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
 
 	if (t <= Epsilon)
 		return false;
@@ -38,11 +38,11 @@ bool Rectangle::hit(const Ray &ray, double &tMin, ShadeRecord &sr) const
 	Vector3 p = ray.o + t * ray.d;
 	Vector3 d = p - point_;
 
-	const double dDotA = dot(d, a_);
+	const float dDotA = dot(d, a_);
 	if (dDotA < 0.0 || dDotA > aSquaredLength_)
 		return false;
 
-	const double dDotB = dot(d, b_);
+	const float dDotB = dot(d, b_);
 	if (dDotB < 0.0 || dDotB > bSquaredLength_)
 		return false;
 
@@ -53,9 +53,9 @@ bool Rectangle::hit(const Ray &ray, double &tMin, ShadeRecord &sr) const
 	return true;
 }
 
-bool Rectangle::shadowHit(const Ray &ray, double &tMin) const
+bool Rectangle::shadowHit(const Ray &ray, float &tMin) const
 {
-	double t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
+	float t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
 
 	if (t <= Epsilon)
 		return false;
@@ -63,11 +63,11 @@ bool Rectangle::shadowHit(const Ray &ray, double &tMin) const
 	Vector3 p = ray.o + t * ray.d;
 	Vector3 d = p - point_;
 
-	const double dDotA = dot(d, a_);
+	const float dDotA = dot(d, a_);
 	if (dDotA < 0.0 || dDotA > aSquaredLength_)
 		return false;
 
-	const double dDotB = dot(d, b_);
+	const float dDotB = dot(d, b_);
 	if (dDotB < 0.0 || dDotB > bSquaredLength_)
 		return false;
 

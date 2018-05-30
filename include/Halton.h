@@ -12,7 +12,7 @@ public:
 	void generateSamples() override;
 
 private:
-	double phi(int i, double base);
+	float phi(int i, float base);
 };
 
 }

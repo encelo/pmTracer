@@ -35,9 +35,9 @@ RGBColor AreaLight::L(ShadeRecord &sr) const
 
 bool AreaLight::inShadow(const Ray &ray, const ShadeRecord &sr) const
 {
-	double t = 0.0;
+	float t = 0.0;
 	const size_t numObjects = sr.w.objects().size();
-	double ts = dot((samplePoint_ - ray.o), ray.d);
+	float ts = dot((samplePoint_ - ray.o), ray.d);
 
 	for (unsigned int i = 0; i < numObjects; i++)
 	{

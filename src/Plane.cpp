@@ -2,10 +2,10 @@
 
 namespace pm {
 
-bool Plane::hit(const Ray &ray, double &tMin, ShadeRecord &sr) const
+bool Plane::hit(const Ray &ray, float &tMin, ShadeRecord &sr) const
 {
 	bool hasHit = false;
-	double t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
+	float t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
 
 	if (t > Epsilon)
 	{
@@ -19,13 +19,13 @@ bool Plane::hit(const Ray &ray, double &tMin, ShadeRecord &sr) const
 	return hasHit;
 }
 
-bool Plane::shadowHit(const Ray &ray, double &tMin) const
+bool Plane::shadowHit(const Ray &ray, float &tMin) const
 {
 	if (castShadows_ == false)
 		return false;
 
 	bool hasHit = false;
-	double t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
+	float t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
 
 	if (t > ShadowEpsilon)
 	{

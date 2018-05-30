@@ -18,8 +18,8 @@ public:
 	Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b);
 	Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b, const Vector3 &normal);
 
-	bool hit(const Ray &ray, double &tMin, ShadeRecord &sr) const override;
-	bool shadowHit(const Ray &ray, double &tMin) const override;
+	bool hit(const Ray &ray, float &tMin, ShadeRecord &sr) const override;
+	bool shadowHit(const Ray &ray, float &tMin) const override;
 
 	Vector3 sample(void) const override;
 	inline float pdf(ShadeRecord &sr) const override { return (invArea_); }
@@ -29,8 +29,8 @@ public:
 	inline void setSampler(Sampler *sampler) { samplerState_.setSampler(sampler); }
 
 private:
-	static constexpr double Epsilon = 0.000000001;
-	static constexpr double ShadowEpsilon = 0.000000001;
+	static constexpr float Epsilon = 0.000000001;
+	static constexpr float ShadowEpsilon = 0.000000001;
 
 	/// Corner vertex
 	Vector3 point_;

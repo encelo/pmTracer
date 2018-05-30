@@ -46,6 +46,7 @@ public:
 	void addLight(std::unique_ptr<Light> light);
 	template<class T, typename... Args> T* createLight(Args&&... args);
 
+	inline const std::vector<std::unique_ptr<Sampler>> &samplers() const { return samplers_; }
 	void addSampler(std::unique_ptr<Sampler> sampler);
 	template<class T, typename... Args> T* createSampler(Args&&... args);
 

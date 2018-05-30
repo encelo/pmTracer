@@ -48,10 +48,10 @@ void World::addSampler(std::unique_ptr<Sampler> sampler)
 ShadeRecord World::hitObjects(const Ray &ray) const
 {
 	ShadeRecord sr(*this);
-	double t;
+	float t;
 	Vector3 normal;
 	Vector3 localHitPoint;
-	double tMin = std::numeric_limits<double>::max();
+	float tMin = std::numeric_limits<float>::max();
 	const size_t numObjects = objects_.size();
 
 	for (unsigned int i = 0; i < numObjects; i++)

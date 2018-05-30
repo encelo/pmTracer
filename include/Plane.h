@@ -13,14 +13,14 @@ public:
 	Plane() : Geometry(), point_(0.0, 0.0, 0.0), normal_(0.0, 1.0, 0.0) { }
 	Plane(const Vector3 &point, const Vector3 &normal) : Geometry(), point_(point), normal_(normal) { }
 
-	bool hit(const Ray &ray, double &tMin, ShadeRecord &sr) const override;
-	bool shadowHit(const Ray &ray, double &tMin) const override;
+	bool hit(const Ray &ray, float &tMin, ShadeRecord &sr) const override;
+	bool shadowHit(const Ray &ray, float &tMin) const override;
 
 	inline Vector3 normal(const Vector3 &point) const override { return normal_; }
 
 private:
-	static constexpr double Epsilon = 0.000000001;
-	static constexpr double ShadowEpsilon = 0.000000001;
+	static constexpr float Epsilon = 0.000000001;
+	static constexpr float ShadowEpsilon = 0.000000001;
 
 	Vector3 point_;
 	Vector3 normal_;

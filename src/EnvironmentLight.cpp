@@ -34,7 +34,7 @@ RGBColor EnvironmentLight::L(ShadeRecord &sr) const
 
 bool EnvironmentLight::inShadow(const Ray &ray, const ShadeRecord &sr) const
 {
-	double t;
+	float t;
 	const size_t numObjects = sr.w.objects().size();
 
 	for (int i = 0; i < numObjects; i++)

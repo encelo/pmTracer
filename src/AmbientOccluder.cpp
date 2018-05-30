@@ -38,7 +38,7 @@ RGBColor AmbientOccluder::L(ShadeRecord &sr) const
 
 inline bool AmbientOccluder::inShadow(const Ray &ray, const ShadeRecord &sr) const
 {
-	double t;
+	float t;
 	const size_t numObjects = sr.w.objects().size();
 
 	for (int i = 0; i < numObjects; i++)

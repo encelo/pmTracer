@@ -15,9 +15,9 @@ public:
 		u_(1.0, 0.0, 0.0), v_(0.0, 1.0, 0.0), w_(0.0, 0.0, 1.0), exposureTime_(1.0f) { }
 	virtual ~Camera() { }
 
-	inline void setEye(double x, double y, double z) { eye_.set(x, y, z); }
-	inline void setLookAt(double x, double y, double z) { lookAt_.set(x, y, z); }
-	inline void setUp(double x, double y, double z) { up_.set(x, y, z); }
+	inline void setEye(float x, float y, float z) { eye_.set(x, y, z); }
+	inline void setLookAt(float x, float y, float z) { lookAt_.set(x, y, z); }
+	inline void setUp(float x, float y, float z) { up_.set(x, y, z); }
 	inline void setExposureTime(float time) { exposureTime_ = time; }
 	void computeUvw();
 

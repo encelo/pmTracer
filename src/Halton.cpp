@@ -20,10 +20,10 @@ void Halton::generateSamples()
 	}
 }
 
-double Halton::phi(int i, double base)
+float Halton::phi(int i, float base)
 {
-	double f = 1.0;
-	double r = 0.0;
+	float f = 1.0;
+	float r = 0.0;
 
 	while(i > 0)
 	{

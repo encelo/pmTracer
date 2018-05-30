@@ -257,7 +257,7 @@ void setupCornellBox(pm::World &world)
 {
 	world.setTracer(std::make_unique<pm::PathTrace>(world));
 
-	auto vpSampler = world.createSampler<pm::NRooks>(16);
+	auto vpSampler = world.createSampler<pm::NRooks>(64);
 
 	world.viewPlane().setDimensions(width, height);
 	world.viewPlane().setSampler(vpSampler);
@@ -364,6 +364,8 @@ void validateWorld(const pm::World world)
 
 int main()
 {
+	std::cout << "Poor Man's Tracer \n\n" << std::flush;
+
 	std::cout << "Setting up the scene...\n" << std::flush;
 	auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -401,18 +403,24 @@ int main()
 
 	auto endTime = std::chrono::high_resolution_clock::now();
 	std::cout << "Scene setting time: ";
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms\n" << std::flush;;
+	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms\n" << std::flush;
 
-	std::cout << "Rendering started...\n" << std::flush;;
+	std::cout << "Scene statistics: " << world.objects().size() << " objects, " << world.materials().size() << " materials, " <<
+	             world.lights().size() << " lights, " << world.samplers().size() << " samplers\n" << std::flush;
+
+	std::cout << "Rendering started";
 	startTime = std::chrono::high_resolution_clock::now();
 
 #if SINGLE_THREAD
+	std::cout << " with one thread...\n" << std::flush;
 	camera.renderScene(world, frame.get());
 #elif SINGLE_THREAD_TILED
+	std::cout << " with one thread (tiled)...\n" << std::flush;
 	for (int i = 0; i < height; i += tileSize)
 		for (int j = 0 ; j < width; j += tileSize)
 			camera.renderScene(world, frame.get(), j, i, tileSize);
 #elif MULTI_THREAD_TILED
+	std::cout << " with " << numThreads << " threads...\n" << std::flush;
 	for (int i = 0; i < numThreads; i++)
 		threads.emplace_back(threadFunc, i, numThreads, std::ref(world), std::ref(camera), frame.get());
 	for (int i = 0; i < numThreads; i++)
@@ -421,14 +429,14 @@ int main()
 
 	endTime = std::chrono::high_resolution_clock::now();
 	std::cout << "Rendering time: ";
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms\n" << std::flush;;
+	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms\n" << std::flush;
 
 	// Save output to PBM ascii format
 	startTime = std::chrono::high_resolution_clock::now();
 	savePbm("image.pbm", frame.get());
 	endTime = std::chrono::high_resolution_clock::now();
 	std::cout << "File save time: ";
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms\n" << std::flush;;
+	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms\n" << std::flush;
 
 	return EXIT_SUCCESS;
 }
