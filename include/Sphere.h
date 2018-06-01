@@ -8,7 +8,7 @@ namespace pm {
 class Sphere : public Geometry
 {
 public:
-	Sphere() : Geometry(), center_(0.0, 0.0, 0.0), radius_(1.0) { }
+	Sphere() : Geometry(), center_(0.0f, 0.0f, 0.0f), radius_(1.0f) { }
 	Sphere(const Vector3 &center, float radius) : Geometry(), center_(center), radius_(radius) { }
 
 	bool hit(const Ray &ray, float &tMin, ShadeRecord &sr) const override;
@@ -20,8 +20,8 @@ public:
 	inline void setRadius(float radius) { radius_ = radius; }
 
 private:
-	static constexpr float Epsilon = 0.000000001;
-	static constexpr float ShadowEpsilon = 0.000000001;
+	static constexpr float Epsilon = 0.000000001f;
+	static constexpr float ShadowEpsilon = 0.000000001f;
 
 	Vector3 center_;
 	float radius_;

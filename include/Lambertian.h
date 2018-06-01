@@ -4,7 +4,7 @@
 #include "BRDF.h"
 #include "ShadeRecord.h"
 
-const float invPi = 1.0 / 3.14159265358979323846;
+const float invPi = 1.0f / 3.14159265358979323846f;
 
 namespace pm {
 
@@ -38,7 +38,7 @@ inline RGBColor Lambertian::sampleF(const ShadeRecord &sr, const Vector3 &wo, Ve
 {
 	Vector3 w = sr.normal;
 	// up vector jittering
-	Vector3 v = cross(Vector3(0.0034, 1, 0.0071), w);
+	Vector3 v = cross(Vector3(0.0034f, 1.0f, 0.0071f), w);
 	v.normalize();
 	Vector3 u = cross(v, w);
 

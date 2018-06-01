@@ -10,7 +10,7 @@ Jittered::Jittered(int numSamples)
 
 void Jittered::generateSamples()
 {
-	const int n = static_cast<int>(sqrtf(numSamples_));
+	const int n = static_cast<int>(sqrtf(static_cast<float>(numSamples_)));
 
 	for (int p = 0; p < numSets_; p++)
 		for (int j = 0; j < n; j++)

@@ -6,11 +6,12 @@
 
 namespace pm {
 
-AreaLight::AreaLight()
-	: object_(std::make_unique<Rectangle>()), material_(std::make_unique<Emissive>())
+AreaLight::AreaLight(Geometry *object)
+	: object_(object), material_(static_cast<const Emissive *>(object->material()))
 {
 
 }
+
 
 Vector3 AreaLight::direction(ShadeRecord &sr) const
 {

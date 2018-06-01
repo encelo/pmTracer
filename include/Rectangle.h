@@ -29,8 +29,8 @@ public:
 	inline void setSampler(Sampler *sampler) { samplerState_.setSampler(sampler); }
 
 private:
-	static constexpr float Epsilon = 0.000000001;
-	static constexpr float ShadowEpsilon = 0.000000001;
+	static constexpr float Epsilon = 0.000000001f;
+	static constexpr float ShadowEpsilon = 0.000000001f;
 
 	/// Corner vertex
 	Vector3 point_;

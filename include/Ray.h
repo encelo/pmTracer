@@ -11,7 +11,7 @@ public:
 	Vector3 o;
 	Vector3 d;
 
-	Ray() : o(0.0, 0.0, 0.0), d(1.0, 0.0, 0.0) { }
+	Ray() : o(0.0f, 0.0f, 0.0f), d(1.0f, 0.0f, 0.0f) { }
 	Ray(const Vector3 &p, const Vector3 &v) : o(p), d(v) { }
 };
 

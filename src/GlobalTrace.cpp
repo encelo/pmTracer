@@ -1,11 +1,11 @@
-#include "PathTrace.h"
+#include "GlobalTrace.h"
 #include "ShadeRecord.h"
 #include "World.h"
 #include "Material.h"
 
 namespace pm {
 
-RGBColor PathTrace::traceRay(const Ray &ray, int depth) const
+RGBColor GlobalTrace::traceRay(const Ray &ray, int depth) const
 {
 	if (depth > world_.viewPlane().maxDepth())
 		return RGBColor(0.0f, 0.0f, 0.0f);
@@ -17,7 +17,7 @@ RGBColor PathTrace::traceRay(const Ray &ray, int depth) const
 		{
 			sr.depth = depth;
 			sr.ray = ray;
-			return sr.material->pathShade(sr);
+			return sr.material->globalShade(sr);
 		}
 		else
 			return world_.background();

@@ -14,6 +14,7 @@ public:
 	RGBColor shade(ShadeRecord &sr) const override;
 	RGBColor areaLightShade(ShadeRecord &sr) const override;
 	RGBColor pathShade(ShadeRecord &sr) const override;
+	RGBColor globalShade(ShadeRecord &sr) const override;
 
 private:
 	std::unique_ptr<PerfectSpecular> reflectiveBrdf_;

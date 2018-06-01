@@ -26,4 +26,15 @@ RGBColor Emissive::pathShade(ShadeRecord &sr) const
 		return RGBColor(0.0f, 0.0f, 0.0f);
 }
 
+RGBColor Emissive::globalShade(ShadeRecord &sr) const
+{
+	if (sr.depth == 1)
+		return RGBColor(0.0f, 0.0f, 0.0f);
+
+	if (dot(-sr.normal, sr.ray.d) > 0.0)
+		return (ls_ * ce_);
+	else
+		return RGBColor(0.0f, 0.0f, 0.0f);
+}
+
 }

@@ -15,6 +15,9 @@ public:
 	virtual RGBColor shade(ShadeRecord &sr) const { return RGBColor(0.0f, 0.0f, 0.0f); }
 	virtual RGBColor areaLightShade(ShadeRecord &sr) const { return RGBColor(0.0f, 0.0f, 0.0f); }
 	virtual RGBColor pathShade(ShadeRecord &sr) const { return RGBColor(0.0f, 0.0f, 0.0f); }
+	virtual RGBColor globalShade(ShadeRecord &sr) const { return RGBColor(0.0f, 0.0f, 0.0f); }
+
+	virtual bool isEmissive() const { return false; }
 };
 
 }

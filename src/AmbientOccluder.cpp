@@ -8,8 +8,8 @@
 namespace pm {
 
 AmbientOccluder::AmbientOccluder()
-	: Light(), u_(1.0, 0.0, 0.0), v_(0.0, 1.0, 0.0), w_(0.0, 0.0, 1.0),
-	  ls_(1.0f), color_(1.0f, 1.0f, 1.0), minAmount_(1.0f)
+	: Light(), u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f),
+	  ls_(1.0f), color_(1.0f, 1.0f, 1.0f), minAmount_(1.0f)
 {
 
 }
@@ -24,7 +24,7 @@ RGBColor AmbientOccluder::L(ShadeRecord &sr) const
 {
 	w_ = sr.normal;
 	// jitter the up vector in case normal is vertical
-	v_ = cross(w_, Vector3(0.0072, 1.0, 0.0034));
+	v_ = cross(w_, Vector3(0.0072f, 1.0f, 0.0034f));
 	v_.normalize();
 	u_ = cross(v_, w_);
 

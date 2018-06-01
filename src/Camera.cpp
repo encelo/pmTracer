@@ -16,17 +16,17 @@ void Camera::computeUvw()
 	if (eye_.x == lookAt_.x && eye_.z == lookAt_.z && eye_.y > lookAt_.y)
 	{
 		// camera looking vertically down
-		u_ = Vector3(0, 0, 1);
-		v_ = Vector3(1, 0, 0);
-		w_ = Vector3(0, 1, 0);
+		u_ = Vector3(0.0f, 0.0f, 1.0f);
+		v_ = Vector3(1.0f, 0.0f, 0.0f);
+		w_ = Vector3(0.0f, 1.0f, 0.0f);
 	}
 
 	if (eye_.x == lookAt_.x && eye_.z == lookAt_.z && eye_.y < lookAt_.y)
 	{
 		// camera looking vertically up
-		u_ = Vector3(1, 0, 0);
-		v_ = Vector3(0, 0, 1);
-		w_ = Vector3(0, -1, 0);
+		u_ = Vector3(1.0f, 0.0f, 0.0f);
+		v_ = Vector3(0.0f, 0.0f, 1.0f);
+		w_ = Vector3(0.0f, -1.0f, 0.0f);
 	}
 */
 }

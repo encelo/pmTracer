@@ -23,12 +23,12 @@ void PinHole::renderScene(World &world, RGBColor *frame, int startX, int startY,
 			for (int j = 0; j < numSamples; j++)
 			{
 				const Vector2 sp = vp.samplerState().sampleUnitSquare();
-				const float x = pixelSize * (c - 0.5 * vp.width() + sp.x);
-				const float y = pixelSize * (r - 0.5 * vp.height() + sp.y);
+				const float x = pixelSize * (c - 0.5f * vp.width() + sp.x);
+				const float y = pixelSize * (r - 0.5f * vp.height() + sp.y);
 				ray.d = rayDirection(x, y);
 				pixel += world.tracer().traceRay(ray, depth);
 			}
-			pixel /= numSamples;
+			pixel /= static_cast<float>(numSamples);
 			pixel *= exposureTime_;
 			frame[r * vp.width() + c] = pixel;
 		}

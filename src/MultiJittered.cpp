@@ -11,7 +11,7 @@ MultiJittered::MultiJittered(int numSamples)
 void MultiJittered::generateSamples(void)
 {
 	// num_samples needs to be a perfect square
-	const int n = static_cast<int>(sqrtf(numSamples_));
+	const int n = static_cast<int>(sqrtf(static_cast<float>(numSamples_)));
 	const float subcellWidth = 1.0f / static_cast<float>(numSamples_);
 
 	// fill the samples array with dummy points to allow us to use the [ ] notation

@@ -20,6 +20,9 @@ public:
 
 	RGBColor areaLightShade(ShadeRecord &sr) const override;
 	RGBColor pathShade(ShadeRecord &sr) const override;
+	RGBColor globalShade(ShadeRecord &sr) const override;
+
+	bool isEmissive() const override { return true; }
 
 private:
 	float ls_;

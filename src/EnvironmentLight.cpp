@@ -7,9 +7,9 @@
 
 namespace pm {
 
-EnvironmentLight::EnvironmentLight()
-	: material_(std::make_unique<Emissive>()),
-	  u_(1.0, 0.0, 0.0), v_(0.0, 1.0, 0.0), w_(0.0, 0.0, 1.0)
+EnvironmentLight::EnvironmentLight(Emissive *material)
+	: material_(material),
+	  u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f)
 {
 
 }
@@ -17,7 +17,7 @@ EnvironmentLight::EnvironmentLight()
 Vector3 EnvironmentLight::direction(ShadeRecord &sr) const
 {
 	w_ = sr.normal;
-	v_ = cross(Vector3(0.0034, 1, 0.0071), w_);
+	v_ = cross(Vector3(0.0034f, 1.0f, 0.0071f), w_);
 	v_.normalize();
 	u_ = cross(v_, w_);
 	Vector3 sp = samplerState_.sampleHemisphere();

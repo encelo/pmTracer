@@ -14,7 +14,7 @@ namespace pm {
 World::World()
 	: background_(0.0f, 0.0f, 0.0f),
 	  tracer_(std::make_unique<Whitted>(*this)),
-	  ambientLight_(std::make_unique<Ambient>())
+	  ambientLight_(std::make_unique<Ambient>(0.0f))
 {
 
 }

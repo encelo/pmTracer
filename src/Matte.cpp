@@ -35,7 +35,7 @@ void Matte::setCd(float r, float g, float b)
 
 RGBColor Matte::shade(ShadeRecord &sr) const
 {
-	Vector3 wo = -sr.ray.d;
+	const Vector3 wo = -sr.ray.d;
 	RGBColor L = ambientBrdf_->rho(sr, wo) * sr.w.ambientLight().L(sr);
 	const size_t numLights = sr.w.lights().size();
 
@@ -65,7 +65,7 @@ RGBColor Matte::shade(ShadeRecord &sr) const
 
 RGBColor Matte::areaLightShade(ShadeRecord &sr) const
 {
-	Vector3 wo = -sr.ray.d;
+	const Vector3 wo = -sr.ray.d;
 	RGBColor L = ambientBrdf_->rho(sr, wo) * sr.w.ambientLight().L(sr);
 	const size_t numLights = sr.w.lights().size();
 
@@ -96,13 +96,32 @@ RGBColor Matte::areaLightShade(ShadeRecord &sr) const
 RGBColor Matte::pathShade(ShadeRecord &sr) const
 {
 	Vector3 wi;
-	Vector3 wo = -sr.ray.d;
+	const Vector3 wo = -sr.ray.d;
+	float pdf = 0.0f;
+	const RGBColor f = diffuseBrdf_->sampleF(sr, wo, wi, pdf);
+	const float nDotWi = dot(sr.normal, wi);
+	Ray reflectedRay(sr.hitPoint, wi);
+
+	return (f * sr.w.tracer().traceRay(reflectedRay, sr.depth + 1) * nDotWi / pdf);
+}
+
+RGBColor Matte::globalShade(ShadeRecord &sr) const
+{
+	RGBColor L;
+
+	if (sr.depth == 0)
+		L = areaLightShade(sr);
+
+	Vector3 wi;
+	const Vector3 wo = -sr.ray.d;
 	float pdf = 0.0f;
 	RGBColor f = diffuseBrdf_->sampleF(sr, wo, wi, pdf);
 	const float nDotWi = dot(sr.normal, wi);
 	Ray reflectedRay(sr.hitPoint, wi);
 
-	return (f * sr.w.tracer().traceRay(reflectedRay, sr.depth + 1) * nDotWi / pdf);
+	L += f * sr.w.tracer().traceRay(reflectedRay, sr.depth + 1) * nDotWi / pdf;
+
+	return L;
 }
 
 }

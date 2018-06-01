@@ -5,7 +5,7 @@
 namespace pm {
 
 Rectangle::Rectangle()
-	: Rectangle(Vector3(-0.5, 0.0, -0.5), Vector3(1.0, 0.0, 0.0), Vector3(0.0, 0.0, 1.0), Vector3(0.0, 1.0, 0.0))
+	: Rectangle(Vector3(-0.5f, 0.0f, -0.5f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 1.0f, 0.0f))
 {
 
 }

@@ -6,17 +6,17 @@ namespace pm {
 bool Sphere::hit(const Ray &ray, float &tMin, ShadeRecord &sr) const
 {
 	bool hasHit = false;
-	float t = 0.0;
+	float t = 0.0f;
 	Vector3 temp = ray.o - center_;
 	float a = dot(ray.d, ray.d);
-	float b = 2.0 * dot(temp, ray.d);
+	float b = 2.0f * dot(temp, ray.d);
 	float c = dot(temp, temp) - radius_ * radius_;
-	float disc = b * b - 4.0 * a * c;
+	float disc = b * b - 4.0f * a * c;
 
-	if (disc > 0.0)
+	if (disc > 0.0f)
 	{
-		float e = sqrt(disc);
-		float denom = 2.0 * a;
+		float e = sqrtf(disc);
+		float denom = 2.0f * a;
 
 		t = (-b - e) / denom; // smaller root
 		if (t > Epsilon)
@@ -48,17 +48,17 @@ bool Sphere::shadowHit(const Ray &ray, float &tMin) const
 		return false;
 
 	bool hasHit = false;
-	float t = 0.0;
+	float t = 0.0f;
 	Vector3 temp = ray.o - center_;
 	float a = dot(ray.d, ray.d);
-	float b = 2.0 * dot(temp, ray.d);
+	float b = 2.0f * dot(temp, ray.d);
 	float c = dot(temp, temp) - radius_ * radius_;
-	float disc = b * b - 4.0 * a * c;
+	float disc = b * b - 4.0f * a * c;
 
-	if (disc > 0.0)
+	if (disc > 0.0f)
 	{
-		float e = sqrt(disc);
-		float denom = 2.0 * a;
+		float e = sqrtf(disc);
+		float denom = 2.0f * a;
 
 		t = (-b - e) / denom; // smaller root
 		if (t > ShadowEpsilon)

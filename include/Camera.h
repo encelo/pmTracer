@@ -11,8 +11,8 @@ class World;
 class Camera
 {
 public:
-	Camera() : eye_(0.0, 0.0, -1.0), lookAt_(0.0, 0.0, 0.0), up_(0.0, 1.0, 0.0),
-		u_(1.0, 0.0, 0.0), v_(0.0, 1.0, 0.0), w_(0.0, 0.0, 1.0), exposureTime_(1.0f) { }
+	Camera() : eye_(0.0f, 0.0f, -1.0f), lookAt_(0.0f, 0.0f, 0.0f), up_(0.0f, 1.0f, 0.0f),
+		u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f), exposureTime_(1.0f) { }
 	virtual ~Camera() { }
 
 	inline void setEye(float x, float y, float z) { eye_.set(x, y, z); }

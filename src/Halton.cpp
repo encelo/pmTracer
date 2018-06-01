@@ -14,7 +14,7 @@ void Halton::generateSamples()
 	{
 		for (int j = 0; j < numSamples_; j++)
 		{
-			Vector2 pv(static_cast<float>(j) / static_cast<float>(numSamples_), phi(j, 2.0));
+			Vector2 pv(static_cast<float>(j) / static_cast<float>(numSamples_), phi(j, 2.0f));
 			samples_.push_back(pv);
 		}
 	}
@@ -22,13 +22,13 @@ void Halton::generateSamples()
 
 float Halton::phi(int i, float base)
 {
-	float f = 1.0;
-	float r = 0.0;
+	float f = 1.0f;
+	float r = 0.0f;
 
 	while(i > 0)
 	{
 		f = f / base;
-		r = r + f * (fmod(i, base));
+		r = r + f * (fmodf(static_cast<float>(i), base));
 		i = static_cast<int>(i / base);
 	}
 

@@ -10,7 +10,7 @@ NRooks::NRooks(int numSamples)
 
 void NRooks::generateSamples()
 {
-	const int n = static_cast<int>(sqrtf(numSamples_));
+	const int n = static_cast<int>(sqrtf(static_cast<float>(numSamples_)));
 
 	for (int p = 0; p < numSets_; p++)
 		for (int i = 0; i < numSamples_; i++)

@@ -28,6 +28,7 @@
 #include "Rectangle.h"
 #include "PathTrace.h"
 #include "EnvironmentLight.h"
+#include "GlobalTrace.h"
 
 #define SINGLE_THREAD (0)
 #define SINGLE_THREAD_TILED (0)
@@ -43,6 +44,7 @@
 const int width = 1280;
 const int height = 720;
 const int tileSize = 16;
+const unsigned int numSamples = 16;
 
 void threadFunc(int id, int numThreads, pm::World &world, pm::Camera &camera, pm::RGBColor *frame)
 {
@@ -71,7 +73,7 @@ void savePbm(const char *filename, pm::RGBColor *frame)
 	std::ofstream file;
 	file.open (filename);
 	file << "P3\n" << width << " " << height << "\n" << 255 << "\n";
-	for (int i = 0 ; i < height; i++)
+	for (int i = height - 1 ; i >= 0; i--)
 	{
 		for (int j = 0 ; j < width; j++)
 		{
@@ -99,31 +101,32 @@ std::unique_ptr<pm::Rectangle> rectangleFromVertices(const pm::Vector3 pA, const
 
 void setupWorld(pm::World &world)
 {
-	//world.setTracer(std::make_unique<pm::AreaLighting>(world));
-	world.setTracer(std::make_unique<pm::PathTrace>(world));
+	world.setTracer(std::make_unique<pm::AreaLighting>(world));
+	//world.setTracer(std::make_unique<pm::PathTrace>(world));
 
-	auto vpSampler = world.createSampler<pm::NRooks>(256);
+	auto vpSampler = world.createSampler<pm::NRooks>(numSamples);
 
 	world.viewPlane().setDimensions(width, height);
 	world.viewPlane().setSampler(vpSampler);
 	world.viewPlane().setMaxDepth(5);
 
-	auto hammersley = world.createSampler<pm::Hammersley>(256);
+	auto hammersley = world.createSampler<pm::Hammersley>(numSamples);
 
 #if AMBIENT
 	auto ambient = std::make_unique<pm::Ambient>();
 	ambient->setRadianceScale(0.01f);
 	world.setAmbientLight(std::move(ambient));
 #elif AMBIENT_OCCLUSION
+	auto multiJittered = world.createSampler<pm::MultiJittered>(64);
 	auto ambient = std::make_unique<pm::AmbientOccluder>();
 	ambient->setRadianceScale(0.01f);
 	ambient->setColor(0.25f, 0.25f, 0.25f);
 	ambient->setMinAmount(0.0f);
-	ambient->setSampler(std::make_unique<pm::MultiJittered>(64));
+	ambient->setSampler(multiJittered);
 	world.setAmbientLight(std::move(ambient));
 #endif
 
-	auto plane = std::make_unique<pm::Plane>(pm::Vector3(0.0, 0.0, 0.0), pm::Vector3(0.0, 1.0, 0.0));
+	auto plane = std::make_unique<pm::Plane>(pm::Vector3(0.0f, 0.0f, 0.0f), pm::Vector3(0.0f, 1.0f, 0.0f));
 	auto white = std::make_unique<pm::Phong>();
 	white->setCd(1.0f, 1.0f, 1.0f);
 	white->setKa(0.25f);
@@ -135,7 +138,7 @@ void setupWorld(pm::World &world)
 	world.addObject(std::move(plane));
 	world.addMaterial(std::move(white));
 
-	auto sphere1 = std::make_unique<pm::Sphere>(pm::Vector3(0.0, 1.0, 0.0), 1.0);
+	auto sphere1 = std::make_unique<pm::Sphere>(pm::Vector3(0.0f, 1.0f, 0.0f), 1.0f);
 	auto red = std::make_unique<pm::Phong>();
 	red->setCd(1.0f, 0.0f, 0.0f);
 	red->setKa(0.25f);
@@ -147,7 +150,7 @@ void setupWorld(pm::World &world)
 	world.addObject(std::move(sphere1));
 	world.addMaterial(std::move(red));
 
-	auto sphere2 = std::make_unique<pm::Sphere>(pm::Vector3(2.0, 0.5, 0.0), 0.5);
+	auto sphere2 = std::make_unique<pm::Sphere>(pm::Vector3(2.0f, 0.5f, 0.0f), 0.5f);
 	auto green = std::make_unique<pm::Phong>();
 	green->setCd(0.0f, 1.0f, 0.0f);
 	green->setKa(0.1f);
@@ -159,7 +162,7 @@ void setupWorld(pm::World &world)
 	world.addObject(std::move(sphere2));
 	world.addMaterial(std::move(green));
 
-	auto sphere3 = std::make_unique<pm::Sphere>(pm::Vector3(-2.0, 2.0, 0.0), 0.75);
+	auto sphere3 = std::make_unique<pm::Sphere>(pm::Vector3(-2.0f, 2.0f, 0.0f), 0.75f);
 	auto blue = std::make_unique<pm::Phong>();
 	blue->setCd(0.0f, 0.0f, 1.0f);
 	blue->setKa(0.1f);
@@ -172,68 +175,51 @@ void setupWorld(pm::World &world)
 	world.addMaterial(std::move(blue));
 
 #if POINT_LIGHTS
-	auto light1 = std::make_unique<pm::PointLight>(0.0, 2.0, -2.0);
+	auto light1 = std::make_unique<pm::PointLight>(0.0f, 2.0f, -2.0f);
 	//light1->setColor(1.0f, 0.0f, 1.0f);
 	light1->setRadianceScale(0.1f);
 	world.addLight(std::move(light1));
 
-	auto light2 = std::make_unique<pm::PointLight>(3.0, 3.0, -2.0);
+	auto light2 = std::make_unique<pm::PointLight>(3.0f, 3.0f, -2.0f);
 	light2->setRadianceScale(0.1f);
 	//light2->setCastShadows(false);
 	//world.addLight(std::move(light2));
 
-	auto light3 = std::make_unique<pm::PointLight>(-3.0, 3.0, -2.0);
+	auto light3 = std::make_unique<pm::PointLight>(-3.0f, 3.0f, -2.0);
 	light3->setRadianceScale(0.1f);
 	//light3->setColor(0.5f, 1.0f, 0.33f);
 	//light3->setCastShadows(false);
 	//world.addLight(std::move(light3));
 
-	auto light4 = std::make_unique<pm::Directional>(-1.0, 1.0, 0.0);
+	auto light4 = std::make_unique<pm::Directional>(-1.0f, 1.0f, 0.0f);
 	light4->setRadianceScale(0.0001f);
 	light4->setColor(0.5f, 1.0f, 0.33f);
 	//light4->setCastShadows(false);
 	//world.addLight(std::move(light4));
 #elif AREA_LIGHTS
-	auto light1 = std::make_unique<pm::AreaLight>();
-	auto object = std::make_unique<pm::Rectangle>(pm::Vector3(-1, 3.0, -1), pm::Vector3(2.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 2.0), pm::Vector3(0.0, -1.0, 0.0));
-	object->setSampler(std::make_unique<pm::Hammersley>(64));
-	light1->setObject(std::move(object));
-	auto emissive = std::make_unique<pm::Emissive>();
+	auto emissive = world.createMaterial<pm::Emissive>();
 	emissive->setRadianceScale(0.25f);
-	//emissive->setCe(1.0f, 0.0f, 0.0f);
-	light1->setMaterial(std::move(emissive));
-	world.addLight(std::move(light1));
-/*
-	auto objectW = std::make_unique<pm::Rectangle>(pm::Vector3(-1, 3.0, -1), pm::Vector3(2.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 2.0), pm::Vector3(0.0, -1.0, 0.0));
-	auto mat = std::make_unique<pm::Matte>();
-	objectW->setMaterial(std::move(mat));
-	objectW->setCastShadows(false);
-	world.addObject(std::move(objectW));
-*/
-	auto light2 = std::make_unique<pm::AreaLight>();
-	auto object2 = std::make_unique<pm::Rectangle>(pm::Vector3(-4, 0.0, 0.5), pm::Vector3(0.0, 1.0, 0.0), pm::Vector3(0.0, 0.0, 1.0), pm::Vector3(1.0, 0.0, 0.0));
-	object2->setSampler(std::make_unique<pm::Hammersley>(64));
-	light2->setObject(std::move(object2));
-	auto emissive2 = std::make_unique<pm::Emissive>();
-	emissive2->setRadianceScale(0.2f);
-	//emissive2->setCe(1.0f, 0.0f, 0.0f);
-	light2->setMaterial(std::move(emissive2));
-	world.addLight(std::move(light2));
-/*
-	auto objectW2 = std::make_unique<pm::Rectangle>(pm::Vector3(-4, 0.0, 0.5), pm::Vector3(0.0, 1.0, 0.0), pm::Vector3(0.0, 0.0, 1.0), pm::Vector3(1.0, 0.0, 0.0));
-	auto mat2 = std::make_unique<pm::Matte>();
-	objectW2->setMaterial(std::move(mat2));
-	objectW2->setCastShadows(false);
-	world.addObject(std::move(objectW2));
-*/
-	auto envlight = std::make_unique<pm::EnvironmentLight>();
-	auto envEmissive = std::make_unique<pm::Emissive>();
+
+	auto object = world.createObject<pm::Rectangle>(pm::Vector3(-1.0f, 3.0f, -1.0f), pm::Vector3(2.0f, 0.0f, 0.0f), pm::Vector3(0.0f, 0.0f, 2.0f), pm::Vector3(0.0f, -1.0f, 0.0f));
+	object->setSampler(hammersley);
+	object->setMaterial(emissive);
+	object->setCastShadows(false);
+	auto light1 = world.createLight<pm::AreaLight>(object);
+
+	auto object2 = world.createObject<pm::Rectangle>(pm::Vector3(-4.0f, 0.0f, 0.5f), pm::Vector3(0.0f, 1.0f, 0.0f), pm::Vector3(0.0f, 0.0f, 1.0f), pm::Vector3(1.0f, 0.0f, 0.0f));
+	object2->setSampler(hammersley);
+	object2->setMaterial(emissive);
+	object2->setCastShadows(false);
+	auto light2 = world.createLight<pm::AreaLight>(object2);
+
+	auto envSampler = world.createSampler<pm::NRooks>(256);
+	auto envEmissive = world.createMaterial<pm::Emissive>();
 	envEmissive->setRadianceScale(0.1f);
 	envEmissive->setCe(1.0f, 1.0f, 0.6f);
-	envlight->setMaterial(std::move(envEmissive));
-	world.addLight(std::move(envlight));
+	auto envlight = world.createLight<pm::EnvironmentLight>(envEmissive);
+	envlight->setSampler(envSampler);
 #elif PATH_TRACE
-	auto object = std::make_unique<pm::Rectangle>(pm::Vector3(-1, 3.0, -1), pm::Vector3(2.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 2.0), pm::Vector3(0.0, -1.0, 0.0));
+	auto object = std::make_unique<pm::Rectangle>(pm::Vector3(-1.0f, 3.0f, -1.0f), pm::Vector3(2.0f, 0.0f, 0.0f), pm::Vector3(0.0f, 0.0f, 2.0f), pm::Vector3(0.0f, -1.0f, 0.0f));
 	object->setSampler(hammersley);
 	auto emissive = std::make_unique<pm::Emissive>();
 	emissive->setRadianceScale(0.25f);
@@ -242,7 +228,7 @@ void setupWorld(pm::World &world)
 	world.addObject(std::move(object));
 	world.addMaterial(std::move(emissive));
 
-	auto object2 = std::make_unique<pm::Rectangle>(pm::Vector3(-4, 0.0, 0.5), pm::Vector3(0.0, 1.0, 0.0), pm::Vector3(0.0, 0.0, 1.0), pm::Vector3(1.0, 0.0, 0.0));
+	auto object2 = std::make_unique<pm::Rectangle>(pm::Vector3(-4.0f, 0.0f, 0.5f), pm::Vector3(0.0f, 1.0f, 0.0f), pm::Vector3(0.0f, 0.0f, 1.0f), pm::Vector3(1.0f, 0.0f, 0.0f));
 	object2->setSampler(hammersley);
 	auto emissive2 = std::make_unique<pm::Emissive>();
 	emissive2->setRadianceScale(0.2f);
@@ -255,101 +241,102 @@ void setupWorld(pm::World &world)
 
 void setupCornellBox(pm::World &world)
 {
-	world.setTracer(std::make_unique<pm::PathTrace>(world));
+	world.setTracer(std::make_unique<pm::GlobalTrace>(world));
 
-	auto vpSampler = world.createSampler<pm::NRooks>(64);
+	auto vpSampler = world.createSampler<pm::MultiJittered>(9);
 
 	world.viewPlane().setDimensions(width, height);
 	world.viewPlane().setSampler(vpSampler);
-	world.viewPlane().setMaxDepth(5);
+	world.viewPlane().setMaxDepth(3);
 
 	auto hammersley = world.createSampler<pm::Hammersley>(256);
 
 	// Materials
 	auto white = world.createMaterial<pm::Matte>();
-	white->setCd(1.0f, 1.0f, 1.0f);
+	white->setCd(0.7f, 0.7f, 0.7f);
 	white->diffuse().setSampler(hammersley);
 
 	auto red = world.createMaterial<pm::Matte>();
-	red->setCd(1.0f, 0.0f, 0.0f);
+	red->setCd(0.7f, 0.0f, 0.0f);
 	red->diffuse().setSampler(hammersley);
 
 	auto green = world.createMaterial<pm::Matte>();
-	green->setCd(0.0f, 1.0f, 0.0f);
+	green->setCd(0.0f, 0.7f, 0.0f);
 	green->diffuse().setSampler(hammersley);
 
 	auto emissive = world.createMaterial<pm::Emissive>();
 
 	// Light
-	auto light = world.createObject<pm::Rectangle>(pm::Vector3(213.0, 548.0, 227.0), pm::Vector3(343.0-213.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 332.0-227.0), pm::Vector3(0.0, -1.0, 0.0));
-	light->setSampler(hammersley);
-	light->setMaterial(emissive);
+	auto lightRect = world.createObject<pm::Rectangle>(pm::Vector3(213.0f, 548.79f, 227.0f), pm::Vector3(343.0f - 213.0f, 0.0f, 0.0f), pm::Vector3(0.0f, 0.0f, 332.0f - 227.0f), pm::Vector3(0.0f, -1.0f, 0.0f));
+	lightRect->setSampler(hammersley);
+	lightRect->setMaterial(emissive);
+	auto light = world.createLight<pm::AreaLight>(lightRect);
 
 	// Walls
-	auto floor = world.createObject<pm::Rectangle>(pm::Vector3(0.0, 0.0, 0.0), pm::Vector3(552.8, 0.0, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(0.0, 1.0, 0.0));
+	auto floor = world.createObject<pm::Rectangle>(pm::Vector3(0.0f, 0.0f, 0.0f), pm::Vector3(552.8f, 0.0f, 0.0f), pm::Vector3(0.0f, 0.0f, 559.2f), pm::Vector3(0.0f, 1.0f, 0.0f));
 	floor->setMaterial(white);
 
-	auto ceiling = world.createObject<pm::Rectangle>(pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(556.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(0.0, -1.0, 0.0));
+	auto ceiling = world.createObject<pm::Rectangle>(pm::Vector3(0.0f, 548.8f, 0.0f), pm::Vector3(556.0f, 0.0f, 0.0f), pm::Vector3(0.0f, 0.0f, 559.2f), pm::Vector3(0.0f, -1.0f, 0.0f));
 	ceiling->setMaterial(white);
 
-	auto leftWall = world.createObject<pm::Rectangle>(pm::Vector3(552.8, 0.0, 0.0), pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(-1.0, 0.0, 0.0));
+	auto leftWall = world.createObject<pm::Rectangle>(pm::Vector3(552.8f, 0.0f, 0.0f), pm::Vector3(0.0f, 548.8f, 0.0f), pm::Vector3(0.0f, 0.0f, 559.2f), pm::Vector3(-1.0f, 0.0f, 0.0f));
 	leftWall->setMaterial(red);
 
-	auto rightWall = world.createObject<pm::Rectangle>(pm::Vector3(0.0, 0.0, 0.0), pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(1.0, 0.0, 0.0));
+	auto rightWall = world.createObject<pm::Rectangle>(pm::Vector3(0.0f, 0.0f, 0.0f), pm::Vector3(0.0f, 548.8f, 0.0f), pm::Vector3(0.0f, 0.0f, 559.2f), pm::Vector3(1.0f, 0.0f, 0.0f));
 	rightWall->setMaterial(green);
 
-	auto backWall = world.createObject<pm::Rectangle>(pm::Vector3(0.0, 0.0, 559.2), pm::Vector3(0.0, 548.8, 0.0), pm::Vector3(556.0, 0.0, 0.0), pm::Vector3(0.0, 0.0, -1.0));
+	auto backWall = world.createObject<pm::Rectangle>(pm::Vector3(0.0f, 0.0f, 559.2f), pm::Vector3(0.0f, 548.8f, 0.0f), pm::Vector3(556.0f, 0.0f, 0.0f), pm::Vector3(0.0f, 0.0f, -1.0f));
 	backWall->setMaterial(white);
 
 	// Short object
-	auto short1 = rectangleFromVertices(pm::Vector3(130.0, 165.0, 65.0), pm::Vector3(82.0, 165.0, 225.0), pm::Vector3(290.0, 165.0, 114.0));
+	auto short1 = rectangleFromVertices(pm::Vector3(130.0f, 165.0f, 65.0f), pm::Vector3(82.0f, 165.0f, 225.0f), pm::Vector3(290.0f, 165.0f, 114.0f));
 	short1->setMaterial(white);
 	world.addObject(std::move(short1));
 
-	auto short2 = rectangleFromVertices(pm::Vector3(290.0, 0.0, 114.0), pm::Vector3(290.0, 165.0, 114.0), pm::Vector3(240.0, 0.0, 272.0));
+	auto short2 = rectangleFromVertices(pm::Vector3(290.0f, 0.0f, 114.0f), pm::Vector3(290.0f, 165.0f, 114.0f), pm::Vector3(240.0f, 0.0f, 272.0f));
 	short2->setMaterial(white);
 	world.addObject(std::move(short2));
 
-	auto short3 = rectangleFromVertices(pm::Vector3(130, 0.0, 65.0), pm::Vector3(130.0, 165.0, 65.0), pm::Vector3(290.0, 0.0, 114.0));
+	auto short3 = rectangleFromVertices(pm::Vector3(130.0f, 0.0f, 65.0f), pm::Vector3(130.0f, 165.0f, 65.0f), pm::Vector3(290.0f, 0.0f, 114.0f));
 	short3->setMaterial(white);
 	world.addObject(std::move(short3));
 
-	auto short4 = rectangleFromVertices(pm::Vector3(82.0, 0.0, 225.0), pm::Vector3(82.0, 165.0, 225.0), pm::Vector3(130.0, 0.0, 65.0));
+	auto short4 = rectangleFromVertices(pm::Vector3(82.0f, 0.0f, 225.0f), pm::Vector3(82.0f, 165.0f, 225.0f), pm::Vector3(130.0f, 0.0f, 65.0f));
 	short4->setMaterial(white);
 	world.addObject(std::move(short4));
 
-	auto short5 = rectangleFromVertices(pm::Vector3(240.0, 0.0, 272.0), pm::Vector3(240.0, 165.0, 272.0), pm::Vector3(82.0, 0.0, 225.0));
+	auto short5 = rectangleFromVertices(pm::Vector3(240.0f, 0.0f, 272.0f), pm::Vector3(240.0f, 165.0f, 272.0f), pm::Vector3(82.0f, 0.0f, 225.0f));
 	short5->setMaterial(white);
 	world.addObject(std::move(short5));
 
 	// Tall object
-	auto tall1 = rectangleFromVertices(pm::Vector3(423.0, 330.0, 247.0), pm::Vector3(265.0, 330.0, 296.0), pm::Vector3(472.0, 330.0, 406.0));
+	auto tall1 = rectangleFromVertices(pm::Vector3(423.0f, 330.0f, 247.0f), pm::Vector3(265.0f, 330.0f, 296.0f), pm::Vector3(472.0f, 330.0f, 406.0f));
 	tall1->setMaterial(white);
 	world.addObject(std::move(tall1));
 
-	auto tall2 = rectangleFromVertices(pm::Vector3(423.0, 0.0, 247.0), pm::Vector3(423.0, 330.0, 247.0), pm::Vector3(472.0, 0.0, 406.0));
+	auto tall2 = rectangleFromVertices(pm::Vector3(423.0f, 0.0f, 247.0f), pm::Vector3(423.0f, 330.0f, 247.0f), pm::Vector3(472.0f, 0.0f, 406.0f));
 	tall2->setMaterial(white);
 	world.addObject(std::move(tall2));
 
-	auto tall3 = rectangleFromVertices(pm::Vector3(472.0, 0.0, 406.0), pm::Vector3(472.0, 330.0, 406.0), pm::Vector3(314.0, 0.0, 456.0));
+	auto tall3 = rectangleFromVertices(pm::Vector3(472.0f, 0.0f, 406.0f), pm::Vector3(472.0f, 330.0f, 406.0f), pm::Vector3(314.0f, 0.0f, 456.0f));
 	tall3->setMaterial(white);
 	world.addObject(std::move(tall3));
 
-	auto tall4 = rectangleFromVertices(pm::Vector3(314.0, 0.0, 456.0), pm::Vector3(314.0, 330.0, 456.0), pm::Vector3(265.0, 0.0, 296.0));
+	auto tall4 = rectangleFromVertices(pm::Vector3(314.0f, 0.0f, 456.0f), pm::Vector3(314.0f, 330.0f, 456.0f), pm::Vector3(265.0f, 0.0f, 296.0f));
 	tall4->setMaterial(white);
 	world.addObject(std::move(tall4));
 
-	auto tall5 = rectangleFromVertices(pm::Vector3(265.0, 0.0, 296.0), pm::Vector3(265.0, 330.0, 296.0), pm::Vector3(423.0, 0.0, 247.0));
+	auto tall5 = rectangleFromVertices(pm::Vector3(265.0f, 0.0f, 296.0f), pm::Vector3(265.0f, 330.0f, 296.0f), pm::Vector3(423.0f, 0.0f, 247.0f));
 	tall5->setMaterial(white);
 	world.addObject(std::move(tall5));
 }
 
-void validateWorld(const pm::World world)
+void validateWorld(const pm::World &world)
 {
 	if (world.viewPlane().samplerState().sampler() == nullptr)
 	{
 		std::cout << "Missing viewplane sampler!\n";
-		exit(-1);
+		exit(EXIT_FAILURE);
 	}
 
 	for (const auto &object : world.objects())
@@ -357,7 +344,7 @@ void validateWorld(const pm::World world)
 		if (object->material() == nullptr)
 		{
 			std::cout << "Missing material!\n";
-			exit(-1);
+			exit(EXIT_FAILURE);
 		}
 	}
 }
@@ -373,14 +360,14 @@ int main()
 
 	pm::World world;
 	//setupWorld(world);
-
 	setupCornellBox(world);
 	world.viewPlane().setPixelSize(0.004f);
+	validateWorld(world);
 
 	pm::PinHole camera;
-	camera.setEye(278.0, 273.0, -800);
-	camera.setUp(0, -1, 0);
-	camera.setLookAt(278.0, 273.0, 0);
+	camera.setEye(278.0f, 273.0f, -800.0f);
+	camera.setUp(0.0f, 1.0f, 0.0f);
+	camera.setLookAt(278.0f, 273.0f, 0.0f);
 	camera.setViewDistance(4.0f);
 	camera.computeUvw();
 
@@ -389,9 +376,9 @@ int main()
 	world.viewPlane().setPixelSize(0.005f);
 
 	pm::PinHole camera;
-	camera.setEye(0, 1.0, -5);
-	camera.setUp(0, -1, 0);
-	camera.setLookAt(0, 1, 0);
+	camera.setEye(0.0f, 1.0f, -5.0f);
+	camera.setUp(0.0f, 1.0f, 0.0f);
+	camera.setLookAt(0.0f, 1.0f, 0.0f);
 	camera.setViewDistance(4.0f);
 	camera.computeUvw();
 	camera.setExposureTime(1.0f);
@@ -421,9 +408,9 @@ int main()
 			camera.renderScene(world, frame.get(), j, i, tileSize);
 #elif MULTI_THREAD_TILED
 	std::cout << " with " << numThreads << " threads...\n" << std::flush;
-	for (int i = 0; i < numThreads; i++)
+	for (unsigned int i = 0; i < numThreads; i++)
 		threads.emplace_back(threadFunc, i, numThreads, std::ref(world), std::ref(camera), frame.get());
-	for (int i = 0; i < numThreads; i++)
+	for (unsigned int i = 0; i < numThreads; i++)
 		threads[i].join();
 #endif
 

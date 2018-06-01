@@ -2,8 +2,8 @@
 #include <algorithm>
 #include "Sampler.h"
 
-const float pi = 3.14159265358979323846;
-const float pi4 = 3.14159265358979323846 / 4.0;
+const float pi = 3.14159265358979323846f;
+const float pi4 = 3.14159265358979323846f / 4.0f;
 
 namespace pm {
 
@@ -65,7 +65,7 @@ void Sampler::mapSamplesToDisk()
 	if (diskSamples_.empty() == false)
 		return;
 
-	const int size = samples_.size();
+	const size_t size = samples_.size();
 	float r, phi;
 	Vector2 sp;
 
@@ -74,8 +74,8 @@ void Sampler::mapSamplesToDisk()
 	for (int i = 0; i < size; i++)
 	{
 		// map sample point to [-1, 1]
-		sp.x = 2.0 * samples_[i].x - 1.0;
-		sp.y = 2.0 * samples_[i].y - 1.0;
+		sp.x = 2.0f * samples_[i].x - 1.0f;
+		sp.y = 2.0f * samples_[i].y - 1.0f;
 
 		// determine the sector
 		if (sp.x > -sp.y)
@@ -90,7 +90,7 @@ void Sampler::mapSamplesToDisk()
 			else
 			{
 				r = sp.y;
-				phi = 2.0 - sp.x / sp.y;
+				phi = 2.0f - sp.x / sp.y;
 			}
 		}
 		else
@@ -99,17 +99,17 @@ void Sampler::mapSamplesToDisk()
 			if (sp.x < sp.y)
 			{
 				r = -sp.x;
-				phi = 4.0 * sp.y / sp.x;
+				phi = 4.0f * sp.y / sp.x;
 			}
 			// sector 4
 			else
 			{
 				r = -sp.y;
 				// avoid division by zero at origin
-				if (sp.y != 0.0)
-					phi = 6 - sp.x / sp.y;
+				if (sp.y != 0.0f)
+					phi = 6.0f - sp.x / sp.y;
 				else
-					phi = 0.0;
+					phi = 0.0f;
 			}
 		}
 
@@ -125,15 +125,15 @@ void Sampler::mapSamplesToHemisphere(float e)
 	if (hemisphereSamples_.empty() == false)
 		return;
 
-	const int size = samples_.size();
+	const size_t size = samples_.size();
 	hemisphereSamples_.reserve(numSamples_ * numSets_);
 
 	for (int i = 0; i < size; i++)
 	{
-		const float cosPhi = cos(2.0 * pi * samples_[i].x);
-		const float sinPhi = sin(2.0 * pi * samples_[i].x);
-		const float cosTheta = pow((1.0 - samples_[i].y), 1.0 / (e + 1.0));
-		const float sinTheta = sqrt(1.0 - cosTheta * cosTheta);
+		const float cosPhi = cosf(2.0f * pi * samples_[i].x);
+		const float sinPhi = sinf(2.0f * pi * samples_[i].x);
+		const float cosTheta = powf((1.0f - samples_[i].y), 1.0f / (e + 1.0f));
+		const float sinTheta = sqrtf(1.0f - cosTheta * cosTheta);
 
 		hemisphereSamples_.push_back(Vector3(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta));
 	}

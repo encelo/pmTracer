@@ -17,7 +17,7 @@ public:
 	virtual bool hit(const Ray &ray, float &tMin, ShadeRecord &sr) const = 0;
 	virtual bool shadowHit(const Ray &ray, float &tMin) const = 0;
 
-	virtual Vector3 sample(void) const { return Vector3(0.0, 0.0, 0.0); }
+	virtual Vector3 sample(void) const { return Vector3(0.0f, 0.0f, 0.0f); }
 	virtual float pdf(ShadeRecord &sr) const { return 1.0f; }
 	virtual Vector3 normal(const Vector3 &point) const = 0;
 

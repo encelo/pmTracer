@@ -7,12 +7,13 @@
 #include "Tracer.h"
 #include "Light.h"
 #include "Sampler.h"
+#include "Geometry.h"
 
 namespace pm {
 
 class RGBColor;
-class Geometry;
 class Material;
+class Emissive;
 
 class World
 {
@@ -83,7 +84,6 @@ T* World::createSampler(Args&&... args)
 	samplers_.push_back(std::make_unique<T>(std::forward<Args>(args)...));
 	return static_cast<T*>(samplers_.back().get());
 }
-
 
 }
 

@@ -13,7 +13,7 @@ class Emissive;
 class AreaLight: public Light
 {
 public:
-	AreaLight();
+	AreaLight(Geometry *object);
 
 	Vector3 direction(ShadeRecord &sr) const override;
 	RGBColor L(ShadeRecord &sr) const override;
@@ -23,15 +23,11 @@ public:
 	float pdf(ShadeRecord &sr) const override;
 
 	inline Geometry &object() const { return *object_; }
-	inline void setObject(std::unique_ptr<Geometry> object) { object_ = std::move(object); }
-
-	inline Emissive &material() const { return *material_; }
-	inline void setMaterial(std::unique_ptr<Emissive> material) { material_ = std::move(material); }
 
 private:
-	std::unique_ptr<Geometry> object_;
+	Geometry *object_;
 	/// An emissive material
-	std::unique_ptr<Emissive> material_;
+	const Emissive *material_;
 	/// Sample point on the surface
 	mutable Vector3 samplePoint_;
 	/// Normal at sample point

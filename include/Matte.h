@@ -20,6 +20,7 @@ public:
 	RGBColor shade(ShadeRecord &sr) const override;
 	RGBColor areaLightShade(ShadeRecord &sr) const override;
 	RGBColor pathShade(ShadeRecord &sr) const override;
+	RGBColor globalShade(ShadeRecord &sr) const override;
 
 	inline Lambertian &ambient() { return *ambientBrdf_; }
 	inline Lambertian &diffuse() { return *diffuseBrdf_; }
