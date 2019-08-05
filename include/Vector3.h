@@ -14,8 +14,10 @@ public:
 
 	Vector3() : x(0.0), y(0.0), z(0.0) { }
 	Vector3(float xx, float yy, float zz) : x(xx), y(yy), z(zz) { }
+	Vector3(float *vec) : x(vec[0]), y(vec[1]), z(vec[2]) { }
 
 	inline void set(float xx, float yy, float zz) { x = xx; y = yy; z = zz; }
+	inline void set(float *vec) { x = vec[0]; y = vec[1]; z = vec[2]; }
 
 	Vector3 operator-() const;
 

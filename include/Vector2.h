@@ -11,8 +11,10 @@ public:
 
 	Vector2() : x(0.0), y(0.0) { }
 	Vector2(float xx, float yy) : x(xx), y(yy) { }
+	Vector2(float *vec) : x(vec[0]), y(vec[1]) { }
 
 	inline void set(float xx, float yy) { x = xx; y = yy; }
+	inline void set(float *vec) { x = vec[0]; y = vec[1]; }
 
 	Vector2 operator-() const;
 
