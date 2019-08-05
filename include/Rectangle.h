@@ -13,7 +13,7 @@ class ShadeRecord;
 
 class Rectangle : public Geometry
 {
-public:
+  public:
 	Rectangle();
 	Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b);
 	Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b, const Vector3 &normal);
@@ -28,7 +28,7 @@ public:
 	inline const SamplerState &samplerState() const { return samplerState_; }
 	inline void setSampler(Sampler *sampler) { samplerState_.setSampler(sampler); }
 
-private:
+  private:
 	static constexpr float Epsilon = 0.000000001f;
 	static constexpr float ShadowEpsilon = 0.000000001f;
 

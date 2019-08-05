@@ -3,7 +3,7 @@
 namespace pm {
 
 Regular::Regular(int numSamples)
-	: Sampler(numSamples)
+    : Sampler(numSamples)
 {
 	Regular::generateSamples();
 }

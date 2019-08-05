@@ -10,10 +10,11 @@ class World;
 
 class Camera
 {
-public:
-	Camera() : eye_(0.0f, 0.0f, -1.0f), lookAt_(0.0f, 0.0f, 0.0f), up_(0.0f, 1.0f, 0.0f),
-		u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f), exposureTime_(1.0f) { }
-	virtual ~Camera() { }
+  public:
+	Camera()
+	    : eye_(0.0f, 0.0f, -1.0f), lookAt_(0.0f, 0.0f, 0.0f), up_(0.0f, 1.0f, 0.0f),
+	      u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f), exposureTime_(1.0f) {}
+	virtual ~Camera() {}
 
 	inline Vector3 &eye() { return eye_; }
 	inline Vector3 &lookAt() { return lookAt_; }
@@ -31,7 +32,7 @@ public:
 	void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight);
 	virtual void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive) = 0;
 
-protected:
+  protected:
 	Vector3 eye_;
 	Vector3 lookAt_;
 	Vector3 up_;

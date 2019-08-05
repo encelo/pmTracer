@@ -8,8 +8,9 @@ namespace pm {
 
 class PinHole : public Camera
 {
-public:
-	PinHole() : Camera(), distance_(1.0f), zoom_(1.0f) { }
+  public:
+	PinHole()
+	    : Camera(), distance_(1.0f), zoom_(1.0f) {}
 
 	inline void setViewDistance(float distance) { distance_ = distance; }
 	Vector3 rayDirection(float x, float y) const;
@@ -17,7 +18,7 @@ public:
 	using Camera::renderScene;
 	void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive) override;
 
-private:
+  private:
 	/// View-plane distance
 	float distance_;
 	/// Zoom factor

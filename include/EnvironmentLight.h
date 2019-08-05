@@ -10,9 +10,9 @@ class ShadeRecord;
 class Sampler;
 class Emissive;
 
-class EnvironmentLight: public Light
+class EnvironmentLight : public Light
 {
-public:
+  public:
 	EnvironmentLight(Emissive *material);
 
 	Vector3 direction(ShadeRecord &sr) const override;
@@ -25,7 +25,7 @@ public:
 	inline Emissive &material() const { return *material_; }
 	inline void setMaterial(Emissive *material) { material_ = material; }
 
-private:
+  private:
 	SamplerState samplerState_;
 	/// An emissive material
 	Emissive *material_;

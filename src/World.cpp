@@ -12,11 +12,10 @@
 namespace pm {
 
 World::World()
-	: background_(0.0f, 0.0f, 0.0f),
-	  tracer_(std::make_unique<Whitted>(*this)),
-	  ambientLight_(std::make_unique<Ambient>(0.0f))
+    : background_(0.0f, 0.0f, 0.0f),
+      tracer_(std::make_unique<Whitted>(*this)),
+      ambientLight_(std::make_unique<Ambient>(0.0f))
 {
-
 }
 
 void World::addObject(std::unique_ptr<Geometry> object)
@@ -43,7 +42,6 @@ void World::addSampler(std::unique_ptr<Sampler> sampler)
 {
 	samplers_.push_back(std::move(sampler));
 }
-
 
 ShadeRecord World::hitObjects(const Ray &ray) const
 {

@@ -7,7 +7,7 @@ namespace pm {
 
 class Emissive : public Material
 {
-public:
+  public:
 	Emissive();
 
 	inline float radianceScale() const { return ls_; }
@@ -24,7 +24,7 @@ public:
 
 	bool isEmissive() const override { return true; }
 
-private:
+  private:
 	float ls_;
 	RGBColor ce_;
 };

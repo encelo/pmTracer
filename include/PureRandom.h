@@ -7,7 +7,7 @@ namespace pm {
 
 class PureRandom : public Sampler
 {
-public:
+  public:
 	explicit PureRandom(int numSamples);
 	void generateSamples() override;
 };

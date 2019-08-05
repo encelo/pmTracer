@@ -8,8 +8,9 @@ namespace pm {
 
 class GlossySpecular : public BRDF
 {
-public:
-	GlossySpecular() : ks_(1.0f), cs_(1.0f, 1.0f, 1.0f), exp_(1.0f) { }
+  public:
+	GlossySpecular()
+	    : ks_(1.0f), cs_(1.0f, 1.0f, 1.0f), exp_(1.0f) {}
 
 	RGBColor f(const ShadeRecord &sr, const Vector3 &wi, const Vector3 &wo) const override;
 
@@ -23,7 +24,7 @@ public:
 	inline float exp() const { return exp_; }
 	inline void setExp(float exp) { exp_ = exp; }
 
-private:
+  private:
 	float ks_;
 	/// Specular color
 	RGBColor cs_;

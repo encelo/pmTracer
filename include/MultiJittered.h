@@ -7,7 +7,7 @@ namespace pm {
 
 class MultiJittered : public Sampler
 {
-public:
+  public:
 	explicit MultiJittered(int numSamples);
 	void generateSamples() override;
 };

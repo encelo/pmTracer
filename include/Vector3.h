@@ -7,17 +7,20 @@ namespace pm {
 
 class Vector3
 {
-public:
+  public:
 	float x;
 	float y;
 	float z;
 
-	Vector3() : x(0.0), y(0.0), z(0.0) { }
-	Vector3(float xx, float yy, float zz) : x(xx), y(yy), z(zz) { }
-	Vector3(float *vec) : x(vec[0]), y(vec[1]), z(vec[2]) { }
+	Vector3()
+	    : x(0.0), y(0.0), z(0.0) {}
+	Vector3(float xx, float yy, float zz)
+	    : x(xx), y(yy), z(zz) {}
+	Vector3(float *vec)
+	    : x(vec[0]), y(vec[1]), z(vec[2]) {}
 
-	inline void set(float xx, float yy, float zz) { x = xx; y = yy; z = zz; }
-	inline void set(float *vec) { x = vec[0]; y = vec[1]; z = vec[2]; }
+	void set(float xx, float yy, float zz);
+	void set(float *vec);
 
 	Vector3 operator-() const;
 
@@ -40,6 +43,19 @@ public:
 	friend float dot(const Vector3 &v1, const Vector3 &v2);
 	friend Vector3 cross(const Vector3 &v1, const Vector3 &v2);
 };
+
+inline void Vector3::set(float xx, float yy, float zz)
+{
+	x = xx;
+	y = yy;
+	z = zz;
+}
+inline void Vector3::set(float *vec)
+{
+	x = vec[0];
+	y = vec[1];
+	z = vec[2];
+}
 
 inline Vector3 Vector3::operator-() const
 {

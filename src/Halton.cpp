@@ -3,7 +3,7 @@
 namespace pm {
 
 Halton::Halton(int numSamples)
-	: Sampler(numSamples)
+    : Sampler(numSamples)
 {
 	Halton::generateSamples();
 }
@@ -25,7 +25,7 @@ float Halton::phi(int i, float base)
 	float f = 1.0f;
 	float r = 0.0f;
 
-	while(i > 0)
+	while (i > 0)
 	{
 		f = f / base;
 		r = r + f * (fmodf(static_cast<float>(i), base));

@@ -5,9 +5,8 @@
 namespace pm {
 
 Reflective::Reflective()
-	: Phong(), reflectiveBrdf_(std::make_unique<PerfectSpecular>())
+    : Phong(), reflectiveBrdf_(std::make_unique<PerfectSpecular>())
 {
-
 }
 
 RGBColor Reflective::shade(ShadeRecord &sr) const

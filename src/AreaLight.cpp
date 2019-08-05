@@ -7,11 +7,9 @@
 namespace pm {
 
 AreaLight::AreaLight(Geometry *object)
-	: object_(object), material_(static_cast<const Emissive *>(object->material()))
+    : object_(object), material_(static_cast<const Emissive *>(object->material()))
 {
-
 }
-
 
 Vector3 AreaLight::direction(ShadeRecord &sr) const
 {
@@ -32,7 +30,6 @@ RGBColor AreaLight::L(ShadeRecord &sr) const
 	else
 		return RGBColor(0.0f, 0.0f, 0.0f);
 }
-
 
 bool AreaLight::inShadow(const Ray &ray, const ShadeRecord &sr) const
 {

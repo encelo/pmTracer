@@ -7,7 +7,7 @@ namespace pm {
 
 class Regular : public Sampler
 {
-public:
+  public:
 	Regular(int numSamples);
 	void generateSamples() override;
 };

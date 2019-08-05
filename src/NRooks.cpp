@@ -3,7 +3,7 @@
 namespace pm {
 
 NRooks::NRooks(int numSamples)
-	: Sampler(numSamples)
+    : Sampler(numSamples)
 {
 	NRooks::generateSamples();
 }
@@ -26,7 +26,7 @@ void NRooks::generateSamples()
 void NRooks::shuffleXCoords()
 {
 	for (int p = 0; p < numSets_; p++)
-		for (int i = 0; i <  numSamples_ - 1; i++)
+		for (int i = 0; i < numSamples_ - 1; i++)
 		{
 			const int target = rnd_.integer(0, numSamples_) + p * numSamples_;
 			const float temp = samples_[i + p * numSamples_ + 1].x;
@@ -38,7 +38,7 @@ void NRooks::shuffleXCoords()
 void NRooks::shuffleYCoords()
 {
 	for (int p = 0; p < numSets_; p++)
-		for (int i = 0; i <  numSamples_ - 1; i++)
+		for (int i = 0; i < numSamples_ - 1; i++)
 		{
 			const int target = rnd_.integer(0, numSamples_) + p * numSamples_;
 			const float temp = samples_[i + p * numSamples_ + 1].y;

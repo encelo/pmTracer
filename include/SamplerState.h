@@ -10,7 +10,7 @@ class Sampler;
 
 class SamplerState
 {
-public:
+  public:
 	SamplerState();
 	SamplerState(Sampler *sampler);
 
@@ -21,12 +21,12 @@ public:
 	/// Returns next sample on unit disk
 	Vector2 sampleUnitDisk() const;
 	/// Returns next sample on hemisphere
-	Vector3 sampleHemisphere() const ;
+	Vector3 sampleHemisphere() const;
 
 	inline const Sampler *sampler() const { return sampler_; }
 	inline void setSampler(Sampler *sampler) { sampler_ = sampler; }
 
-private:
+  private:
 	/// The current number of sample points used
 	mutable unsigned long count_;
 	/// Random index jump

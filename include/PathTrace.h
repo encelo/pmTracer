@@ -7,8 +7,9 @@ namespace pm {
 
 class PathTrace : public Tracer
 {
-public:
-	PathTrace(World &world) : Tracer(world) { }
+  public:
+	PathTrace(World &world)
+	    : Tracer(world) {}
 
 	RGBColor traceRay(const Ray &ray, int depth) const override;
 };

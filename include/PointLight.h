@@ -6,10 +6,11 @@
 
 namespace pm {
 
-class PointLight: public Light
+class PointLight : public Light
 {
-public:
-	PointLight(float x, float y, float z) : Light(), ls_(1.0f), color_(1.0f, 1.0f, 1.0f), location_(x, y, z) { }
+  public:
+	PointLight(float x, float y, float z)
+	    : Light(), ls_(1.0f), color_(1.0f, 1.0f, 1.0f), location_(x, y, z) {}
 
 	inline Vector3 direction(ShadeRecord &sr) const override { return (location_ - sr.hitPoint).normalize(); }
 	inline RGBColor L(ShadeRecord &sr) const override { return (ls_ * color_); }
@@ -26,7 +27,7 @@ public:
 	inline void setLocation(const Vector3 &location) { location_ = location; }
 	inline void setLocation(float x, float y, float z) { location_.set(x, y, z); }
 
-private:
+  private:
 	float ls_;
 	RGBColor color_;
 	Vector3 location_;

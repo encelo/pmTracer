@@ -7,11 +7,11 @@ namespace pm {
 
 class Hammersley : public Sampler
 {
-public:
+  public:
 	explicit Hammersley(int numSamples);
 	void generateSamples() override;
 
-private:
+  private:
 	float phi(int i);
 };
 

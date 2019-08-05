@@ -9,7 +9,7 @@ namespace pm {
 
 class Matte : public Material
 {
-public:
+  public:
 	Matte();
 
 	void setKa(float ka);
@@ -25,7 +25,7 @@ public:
 	inline Lambertian &ambient() { return *ambientBrdf_; }
 	inline Lambertian &diffuse() { return *diffuseBrdf_; }
 
-private:
+  private:
 	std::unique_ptr<Lambertian> ambientBrdf_;
 	std::unique_ptr<Lambertian> diffuseBrdf_;
 };

@@ -9,9 +9,9 @@ class ShadeRecord;
 class Geometry;
 class Emissive;
 
-class AreaLight: public Light
+class AreaLight : public Light
 {
-public:
+  public:
 	AreaLight(Geometry *object);
 
 	Vector3 direction(ShadeRecord &sr) const override;
@@ -23,7 +23,7 @@ public:
 
 	inline Geometry &object() const { return *object_; }
 
-private:
+  private:
 	Geometry *object_;
 	/// An emissive material
 	const Emissive *material_;

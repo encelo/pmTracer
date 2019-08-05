@@ -3,7 +3,7 @@
 namespace pm {
 
 PureRandom::PureRandom(int numSamples)
-	: Sampler(numSamples)
+    : Sampler(numSamples)
 {
 	PureRandom::generateSamples();
 }

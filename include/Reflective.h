@@ -8,7 +8,7 @@ namespace pm {
 
 class Reflective : public Phong
 {
-public:
+  public:
 	Reflective();
 
 	RGBColor shade(ShadeRecord &sr) const override;
@@ -16,7 +16,7 @@ public:
 	RGBColor pathShade(ShadeRecord &sr) const override;
 	RGBColor globalShade(ShadeRecord &sr) const override;
 
-private:
+  private:
 	std::unique_ptr<PerfectSpecular> reflectiveBrdf_;
 };
 

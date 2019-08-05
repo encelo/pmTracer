@@ -10,9 +10,9 @@ namespace pm {
 
 class Sampler
 {
-public:
+  public:
 	Sampler(int numSamples);
-	virtual ~Sampler() { }
+	virtual ~Sampler() {}
 
 	/// Returns next sample on unit square
 	Vector2 sampleUnitSquare(unsigned long &count, int &jump);
@@ -33,7 +33,7 @@ public:
 	void mapSamplesToDisk();
 	void mapSamplesToHemisphere(float e);
 
-protected:
+  protected:
 	/// The number of samples points in a pattern
 	int numSamples_;
 	/// The number of sample sets (patterns) stored

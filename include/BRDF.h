@@ -13,18 +13,18 @@ class Sampler;
 
 class BRDF
 {
-public:
-	virtual ~BRDF() { }
+  public:
+	virtual ~BRDF() {}
 
 	virtual RGBColor f(const ShadeRecord &sr, const Vector3 &wo, const Vector3 &wi) const { return RGBColor(0.0f, 0.0f, 0.0f); }
 	virtual RGBColor sampleF(const ShadeRecord &sr, const Vector3 &wo, Vector3 &wi) const { return RGBColor(0.0f, 0.0f, 0.0f); }
-	virtual RGBColor sampleF(const ShadeRecord &sr, const Vector3& wo, Vector3& wi, float& pdf) const { return RGBColor(0.0f, 0.0f, 0.0f); }
+	virtual RGBColor sampleF(const ShadeRecord &sr, const Vector3 &wo, Vector3 &wi, float &pdf) const { return RGBColor(0.0f, 0.0f, 0.0f); }
 	virtual RGBColor rho(const ShadeRecord &sr, const Vector3 &wo) const { return RGBColor(0.0f, 0.0f, 0.0f); }
 
 	inline SamplerState &samplerState() { return samplerState_; }
 	void setSampler(Sampler *sampler);
 
-protected:
+  protected:
 	SamplerState samplerState_;
 };
 

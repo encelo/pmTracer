@@ -7,15 +7,17 @@ namespace pm {
 
 class RGBColor
 {
-public:
+  public:
 	float r;
 	float g;
 	float b;
 
-	RGBColor() : r(0.0f), g(0.0f), b(0.0f) { }
-	RGBColor(float rr, float gg, float bb) : r(rr), g(gg), b(bb) { }
+	RGBColor()
+	    : r(0.0f), g(0.0f), b(0.0f) {}
+	RGBColor(float rr, float gg, float bb)
+	    : r(rr), g(gg), b(bb) {}
 
-	void set(float rr, float gg, float bb) { r = rr; g = gg; b = bb;}
+	void set(float rr, float gg, float bb);
 
 	RGBColor &operator+=(const RGBColor &c);
 	RGBColor &operator-=(const RGBColor &c);
@@ -36,6 +38,13 @@ public:
 
 	RGBColor &pow(float exp);
 };
+
+inline void RGBColor::set(float rr, float gg, float bb)
+{
+	r = rr;
+	g = gg;
+	b = bb;
+}
 
 inline RGBColor &RGBColor::operator+=(const RGBColor &c)
 {

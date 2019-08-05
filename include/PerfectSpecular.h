@@ -8,8 +8,9 @@ namespace pm {
 
 class PerfectSpecular : public BRDF
 {
-public:
-	PerfectSpecular() : kr_(1.0f), cr_(1.0f, 1.0f, 1.0f) { }
+  public:
+	PerfectSpecular()
+	    : kr_(1.0f), cr_(1.0f, 1.0f, 1.0f) {}
 
 	RGBColor sampleF(const ShadeRecord &sr, const Vector3 &wo, Vector3 &wi) const override;
 	RGBColor sampleF(const ShadeRecord &sr, const Vector3 &wo, Vector3 &wi, float &pdf) const override;
@@ -21,7 +22,7 @@ public:
 	inline void setCr(float r, float g, float b) { cr_.set(r, g, b); }
 	inline void setCr(const RGBColor &color) { cr_ = color; }
 
-private:
+  private:
 	float kr_;
 	RGBColor cr_;
 };

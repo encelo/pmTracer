@@ -9,9 +9,10 @@ namespace pm {
 
 class Geometry
 {
-public:
-	Geometry() : castShadows_(true) { }
-	virtual ~Geometry() { }
+  public:
+	Geometry()
+	    : castShadows_(true) {}
+	virtual ~Geometry() {}
 
 	virtual bool hit(const Ray &ray, float &tMin, ShadeRecord &sr) const = 0;
 	virtual bool shadowHit(const Ray &ray, float &tMin) const = 0;
@@ -26,7 +27,7 @@ public:
 	inline const Material *material() const { return material_; }
 	inline void setMaterial(Material *material) { material_ = material; }
 
-protected:
+  protected:
 	bool castShadows_;
 	Material *material_;
 };

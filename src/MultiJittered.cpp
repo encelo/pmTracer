@@ -3,7 +3,7 @@
 namespace pm {
 
 MultiJittered::MultiJittered(int numSamples)
-	: Sampler(numSamples)
+    : Sampler(numSamples)
 {
 	MultiJittered::generateSamples();
 }
@@ -52,7 +52,7 @@ void MultiJittered::generateSamples(void)
 				float t = samples_[j * n + i + p * numSamples_].y;
 				samples_[j * n + i + p * numSamples_].y = samples_[k * n + i + p * numSamples_].y;
 				samples_[k * n + i + p * numSamples_].y = t;
-		}
+			}
 }
 
 }

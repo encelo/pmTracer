@@ -7,11 +7,11 @@ namespace pm {
 
 class NRooks : public Sampler
 {
-public:
+  public:
 	explicit NRooks(int numSamples);
 	void generateSamples() override;
 
-private:
+  private:
 	void shuffleXCoords();
 	void shuffleYCoords();
 };

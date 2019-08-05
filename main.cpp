@@ -52,7 +52,7 @@ void threadFunc(int id, int numThreads, pm::World &world, pm::Camera &camera, pm
 	int startY = (id * tileSize) % height;
 	int startX = ((id * tileSize) / height) * tileSize;
 
-	while(hasFinished == false)
+	while (hasFinished == false)
 	{
 		camera.renderScene(world, frame, startX, startY, tileSize);
 		iteration++;
@@ -370,7 +370,7 @@ int main()
 	camera.setViewDistance(4.0f);
 	camera.computeUvw();
 
-/*
+#if 0
 	//pm::Ortographic camera;
 	world.viewPlane().setPixelSize(0.005f);
 
@@ -381,7 +381,7 @@ int main()
 	camera.setViewDistance(4.0f);
 	camera.computeUvw();
 	camera.setExposureTime(1.0f);
-*/
+#endif
 
 	const unsigned int numThreads = std::thread::hardware_concurrency();
 	std::vector<std::thread> threads;

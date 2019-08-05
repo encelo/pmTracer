@@ -10,7 +10,7 @@ namespace pm {
 
 class Phong : public Material
 {
-public:
+  public:
 	Phong();
 
 	void setKa(float ka);
@@ -30,7 +30,7 @@ public:
 	inline Lambertian &diffuse() { return *diffuseBrdf_; }
 	inline GlossySpecular &specular() { return *specularBrdf_; }
 
-private:
+  private:
 	std::unique_ptr<Lambertian> ambientBrdf_;
 	std::unique_ptr<Lambertian> diffuseBrdf_;
 	std::unique_ptr<GlossySpecular> specularBrdf_;

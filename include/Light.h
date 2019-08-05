@@ -11,9 +11,10 @@ class Ray;
 
 class Light
 {
-public:
-	Light() : castShadows_(true) { }
-	virtual ~Light() { }
+  public:
+	Light()
+	    : castShadows_(true) {}
+	virtual ~Light() {}
 
 	virtual Vector3 direction(ShadeRecord &sr) const = 0;
 	virtual RGBColor L(ShadeRecord &sr) const = 0;
@@ -25,7 +26,7 @@ public:
 	inline bool castShadows() const { return castShadows_; }
 	inline void setCastShadows(bool castShadows) { castShadows_ = castShadows; }
 
-protected:
+  protected:
 	bool castShadows_;
 };
 

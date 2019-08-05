@@ -7,8 +7,9 @@ namespace pm {
 
 class AreaLighting : public Tracer
 {
-public:
-	AreaLighting(World &world) : Tracer(world) { }
+  public:
+	AreaLighting(World &world)
+	    : Tracer(world) {}
 
 	RGBColor traceRay(const Ray &ray, int depth) const override;
 };

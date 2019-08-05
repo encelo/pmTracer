@@ -12,7 +12,7 @@ class World;
 
 class ShadeRecord
 {
-public:
+  public:
 	/// True if the ray hit an object
 	bool hitAnObject;
 	/// Material of the nearest object
@@ -35,7 +35,7 @@ public:
 	const World &w;
 
 	ShadeRecord(const World &wr)
-	    : hitAnObject(false), material(nullptr), w(wr) { }
+	    : hitAnObject(false), material(nullptr), w(wr) {}
 };
 
 }

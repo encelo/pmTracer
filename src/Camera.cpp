@@ -11,7 +11,7 @@ void Camera::computeUvw()
 	u_.normalize();
 	v_ = cross(w_, u_);
 
-/*
+#if 0
 	// take care of the singularity by hardwiring in specific camera orientations
 	if (eye_.x == lookAt_.x && eye_.z == lookAt_.z && eye_.y > lookAt_.y)
 	{
@@ -28,7 +28,7 @@ void Camera::computeUvw()
 		v_ = Vector3(0.0f, 0.0f, 1.0f);
 		w_ = Vector3(0.0f, -1.0f, 0.0f);
 	}
-*/
+#endif
 }
 
 void Camera::renderScene(World &world, RGBColor *frame)

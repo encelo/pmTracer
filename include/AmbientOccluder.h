@@ -9,9 +9,9 @@ namespace pm {
 
 class Sampler;
 
-class AmbientOccluder: public Light
+class AmbientOccluder : public Light
 {
-public:
+  public:
 	AmbientOccluder();
 
 	Vector3 direction(ShadeRecord &sr) const override;
@@ -31,7 +31,7 @@ public:
 	inline const SamplerState &samplerState() const { return samplerState_; }
 	void setSampler(Sampler *sampler);
 
-private:
+  private:
 	mutable Vector3 u_;
 	mutable Vector3 v_;
 	mutable Vector3 w_;

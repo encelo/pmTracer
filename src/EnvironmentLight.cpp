@@ -8,10 +8,9 @@
 namespace pm {
 
 EnvironmentLight::EnvironmentLight(Emissive *material)
-	: material_(material),
-	  u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f)
+    : material_(material),
+      u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f)
 {
-
 }
 
 Vector3 EnvironmentLight::direction(ShadeRecord &sr) const
@@ -30,7 +29,6 @@ RGBColor EnvironmentLight::L(ShadeRecord &sr) const
 {
 	return material_->le(sr);
 }
-
 
 bool EnvironmentLight::inShadow(const Ray &ray, const ShadeRecord &sr) const
 {

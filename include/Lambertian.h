@@ -10,8 +10,9 @@ namespace pm {
 
 class Lambertian : public BRDF
 {
-public:
-	Lambertian() : kd_(1.0f), cd_(1.0f, 1.0f, 1.0f) { }
+  public:
+	Lambertian()
+	    : kd_(1.0f), cd_(1.0f, 1.0f, 1.0f) {}
 
 	RGBColor f(const ShadeRecord &sr, const Vector3 &wo, const Vector3 &wi) const override;
 	RGBColor sampleF(const ShadeRecord &sr, const Vector3 &wo, Vector3 &wi, float &pdf) const override;
@@ -24,7 +25,7 @@ public:
 	inline void setCd(float r, float g, float b) { cd_.set(r, g, b); }
 	inline void setCd(const RGBColor &color) { cd_ = color; }
 
-private:
+  private:
 	float kd_;
 	RGBColor cd_;
 };

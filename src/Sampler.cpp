@@ -8,7 +8,7 @@ const float pi4 = 3.14159265358979323846f / 4.0f;
 namespace pm {
 
 Sampler::Sampler(int numSamples)
-	: numSamples_(numSamples), numSets_(83)
+    : numSamples_(numSamples), numSets_(83)
 {
 	samples_.reserve(numSamples_ * numSets_);
 	setupShuffleIndices();

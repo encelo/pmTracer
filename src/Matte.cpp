@@ -5,10 +5,9 @@
 namespace pm {
 
 Matte::Matte()
-	: Material(), ambientBrdf_(std::make_unique<Lambertian>()),
-	  diffuseBrdf_(std::make_unique<Lambertian>())
+    : Material(), ambientBrdf_(std::make_unique<Lambertian>()),
+      diffuseBrdf_(std::make_unique<Lambertian>())
 {
-
 }
 
 void Matte::setKa(float ka)

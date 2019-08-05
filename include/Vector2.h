@@ -5,16 +5,19 @@ namespace pm {
 
 class Vector2
 {
-public:
+  public:
 	float x;
 	float y;
 
-	Vector2() : x(0.0), y(0.0) { }
-	Vector2(float xx, float yy) : x(xx), y(yy) { }
-	Vector2(float *vec) : x(vec[0]), y(vec[1]) { }
+	Vector2()
+	    : x(0.0), y(0.0) {}
+	Vector2(float xx, float yy)
+	    : x(xx), y(yy) {}
+	Vector2(float *vec)
+	    : x(vec[0]), y(vec[1]) {}
 
-	inline void set(float xx, float yy) { x = xx; y = yy; }
-	inline void set(float *vec) { x = vec[0]; y = vec[1]; }
+	void set(float xx, float yy);
+	void set(float *vec);
 
 	Vector2 operator-() const;
 
@@ -29,6 +32,17 @@ public:
 	friend Vector2 operator*(float s, const Vector2 &v);
 	friend Vector2 operator/(float s, const Vector2 &v);
 };
+
+inline void Vector2::set(float xx, float yy)
+{
+	x = xx;
+	y = yy;
+}
+inline void Vector2::set(float *vec)
+{
+	x = vec[0];
+	y = vec[1];
+}
 
 inline Vector2 Vector2::operator-() const
 {

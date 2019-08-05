@@ -3,7 +3,7 @@
 namespace pm {
 
 Jittered::Jittered(int numSamples)
-	: Sampler(numSamples)
+    : Sampler(numSamples)
 {
 	Jittered::generateSamples();
 }

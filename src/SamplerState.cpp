@@ -4,15 +4,13 @@
 namespace pm {
 
 SamplerState::SamplerState()
-	: count_(0), jump_(0), sampler_(nullptr)
+    : count_(0), jump_(0), sampler_(nullptr)
 {
-
 }
 
 SamplerState::SamplerState(Sampler *sampler)
-	: count_(0), jump_(0), sampler_(sampler)
+    : count_(0), jump_(0), sampler_(sampler)
 {
-
 }
 
 int SamplerState::numSamples() const

@@ -5,11 +5,10 @@
 namespace pm {
 
 Phong::Phong()
-	: Material(), ambientBrdf_(std::make_unique<Lambertian>()),
-	  diffuseBrdf_(std::make_unique<Lambertian>()),
-	  specularBrdf_(std::make_unique<GlossySpecular>())
+    : Material(), ambientBrdf_(std::make_unique<Lambertian>()),
+      diffuseBrdf_(std::make_unique<Lambertian>()),
+      specularBrdf_(std::make_unique<GlossySpecular>())
 {
-
 }
 
 void Phong::setKa(float ka)

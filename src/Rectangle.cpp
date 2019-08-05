@@ -5,19 +5,17 @@
 namespace pm {
 
 Rectangle::Rectangle()
-	: Rectangle(Vector3(-0.5f, 0.0f, -0.5f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 1.0f, 0.0f))
+    : Rectangle(Vector3(-0.5f, 0.0f, -0.5f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 1.0f, 0.0f))
 {
-
 }
 
 Rectangle::Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b)
-	: Rectangle(point, a, b, cross(a, b))
+    : Rectangle(point, a, b, cross(a, b))
 {
-
 }
 
 Rectangle::Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b, const Vector3 &normal)
-	: Geometry(), point_(point), a_(a), b_(b), normal_(normal)
+    : Geometry(), point_(point), a_(a), b_(b), normal_(normal)
 {
 	normal_.normalize();
 

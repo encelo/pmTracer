@@ -7,8 +7,9 @@ namespace pm {
 
 class Whitted : public Tracer
 {
-public:
-	Whitted(World &world) : Tracer(world) { }
+  public:
+	Whitted(World &world)
+	    : Tracer(world) {}
 
 	RGBColor traceRay(const Ray &ray, int depth) const override;
 };

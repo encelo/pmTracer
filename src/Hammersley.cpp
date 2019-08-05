@@ -3,7 +3,7 @@
 namespace pm {
 
 Hammersley::Hammersley(int numSamples)
-	: Sampler(numSamples)
+    : Sampler(numSamples)
 {
 	Hammersley::generateSamples();
 }

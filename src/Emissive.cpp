@@ -5,9 +5,8 @@
 namespace pm {
 
 Emissive::Emissive()
-	: Material(), ls_(1.0f), ce_(1.0f, 1.0f, 1.0f)
+    : Material(), ls_(1.0f), ce_(1.0f, 1.0f, 1.0f)
 {
-
 }
 
 RGBColor Emissive::areaLightShade(ShadeRecord &sr) const
