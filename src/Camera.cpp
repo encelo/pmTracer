@@ -41,4 +41,9 @@ void Camera::renderScene(World &world, RGBColor *frame, int startX, int startY, 
 	renderScene(world, frame, startX, startY, tileSize, tileSize);
 }
 
+void Camera::renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight)
+{
+	renderScene(world, frame, startX, startY, tileWidth, tileHeight, false);
+}
+
 }

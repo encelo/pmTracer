@@ -5,14 +5,14 @@
 
 namespace pm {
 
-void Ortographic::renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight)
+void Ortographic::renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive)
 {
 	Ray ray;
 	ray.d = Vector3(0.0f, 0.0f, -1.0f);
 	const ViewPlane &vp = world.viewPlane();
 	const float zw = 100.0f; // hard-coded
 
-	const int numSamples = vp.samplerState().numSamples();
+	const int numSamples = progressive ? 1 : vp.samplerState().numSamples();
 	for (int r = startY; r < startY + tileHeight; r++)
 	{
 		for (int c = startX; c < startX + tileWidth; c++)
@@ -26,8 +26,9 @@ void Ortographic::renderScene(World &world, RGBColor *frame, int startX, int sta
 				ray.o = Vector3(x, y, zw);
 				pixel += world.tracer().traceRay(ray, 0);
 			}
-			pixel /= static_cast<float>(numSamples);
-			frame[r * vp.width() + c] = pixel;
+			// Divide by number of samples even in progressive mode or the image gets too bright
+			pixel /= static_cast<float>(vp.samplerState().numSamples());
+			frame[r * vp.width() + c] += pixel;
 		}
 	}
 }

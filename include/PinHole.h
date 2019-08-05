@@ -15,7 +15,7 @@ public:
 	Vector3 rayDirection(float x, float y) const;
 
 	using Camera::renderScene;
-	void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight) override;
+	void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive) override;
 
 private:
 	/// View-plane distance

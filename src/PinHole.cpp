@@ -5,7 +5,7 @@
 
 namespace pm {
 
-void PinHole::renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight)
+void PinHole::renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive)
 {
 	Ray ray;
 	ray.o = eye_;
@@ -14,7 +14,7 @@ void PinHole::renderScene(World &world, RGBColor *frame, int startX, int startY,
 	int depth = 0; // recursion depth
 	const float pixelSize = vp.pixelSize() / zoom_;
 
-	const int numSamples = vp.samplerState().numSamples();
+	const int numSamples = progressive ? 1 : vp.samplerState().numSamples();
 	for (int r = startY; r < startY + tileHeight; r++)
 	{
 		for (int c = startX; c < startX + tileWidth; c++)
@@ -28,9 +28,10 @@ void PinHole::renderScene(World &world, RGBColor *frame, int startX, int startY,
 				ray.d = rayDirection(x, y);
 				pixel += world.tracer().traceRay(ray, depth);
 			}
-			pixel /= static_cast<float>(numSamples);
+			// Divide by number of samples even in progressive mode or the image gets too bright
+			pixel /= static_cast<float>(vp.samplerState().numSamples());
 			pixel *= exposureTime_;
-			frame[r * vp.width() + c] = pixel;
+			frame[r * vp.width() + c] += pixel;
 		}
 	}
 }

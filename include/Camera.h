@@ -15,6 +15,11 @@ public:
 		u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f), exposureTime_(1.0f) { }
 	virtual ~Camera() { }
 
+	inline Vector3 &eye() { return eye_; }
+	inline Vector3 &lookAt() { return lookAt_; }
+	inline Vector3 &up() { return up_; }
+	inline float &exposureTime() { return exposureTime_; }
+
 	inline void setEye(float x, float y, float z) { eye_.set(x, y, z); }
 	inline void setLookAt(float x, float y, float z) { lookAt_.set(x, y, z); }
 	inline void setUp(float x, float y, float z) { up_.set(x, y, z); }
@@ -23,7 +28,8 @@ public:
 
 	void renderScene(World &world, RGBColor *frame);
 	void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileSize);
-	virtual void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight) = 0;
+	void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight);
+	virtual void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive) = 0;
 
 protected:
 	Vector3 eye_;
