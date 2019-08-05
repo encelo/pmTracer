@@ -1,7 +1,6 @@
 #ifndef PMTRACER_AMBIENTOCCLUDER_H
 #define PMTRACER_AMBIENTOCCLUDER_H
 
-#include <memory>
 #include "Light.h"
 #include "ShadeRecord.h"
 #include "SamplerState.h"

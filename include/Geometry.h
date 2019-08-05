@@ -1,7 +1,6 @@
 #ifndef PMTRACER_GEOMETRY_H
 #define PMTRACER_GEOMETRY_H
 
-#include <memory>
 #include "ShadeRecord.h"
 #include "Ray.h"
 #include "Material.h"

@@ -1,7 +1,6 @@
 #ifndef PMTRACER_AREALIGHT_H
 #define PMTRACER_AREALIGHT_H
 
-#include <memory>
 #include "Light.h"
 
 namespace pm {

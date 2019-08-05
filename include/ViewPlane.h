@@ -1,7 +1,6 @@
 #ifndef PMTRACER_VIEWPLANE_H
 #define PMTRACER_VIEWPLANE_H
 
-#include <memory>
 #include "SamplerState.h"
 
 namespace pm {

@@ -1,7 +1,6 @@
 #ifndef PMTRACER_BRDF_H
 #define PMTRACER_BRDF_H
 
-#include <memory>
 #include "RGBColor.h"
 #include "SamplerState.h"
 #include "Sampler.h"

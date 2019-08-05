@@ -1,7 +1,6 @@
 #ifndef PMTRACER_ENVIRONMENTLIGHT_H
 #define PMTRACER_ENVIRONMENTLIGHT_H
 
-#include <memory>
 #include "Light.h"
 #include "SamplerState.h"
 
