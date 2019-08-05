@@ -4,6 +4,7 @@ project(pmTracer)
 find_package(Threads)
 
 set(SOURCES
+	src/Random.cpp
 	src/Plane.cpp
 	src/Sphere.cpp
 	src/Rectangle.cpp

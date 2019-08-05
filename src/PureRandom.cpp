@@ -12,7 +12,7 @@ void PureRandom::generateSamples()
 {
 	for (int p = 0; p < numSets_; p++)
 		for (int q = 0; q < numSamples_; q++)
-			samples_.push_back(Vector2(rndFloatDist_(rndGen_), rndFloatDist_(rndGen_)));
+			samples_.push_back(Vector2(rnd_.real(), rnd_.real()));
 }
 
 }

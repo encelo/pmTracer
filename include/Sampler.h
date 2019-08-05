@@ -2,7 +2,7 @@
 #define PMTRACER_SAMPLER_H
 
 #include <vector>
-#include <random>
+#include "Random.h"
 #include "Vector2.h"
 #include "Vector3.h"
 
@@ -47,9 +47,7 @@ protected:
 	/// Shuffled samples array indices
 	std::vector<int> shuffledIndices_;
 
-	std::default_random_engine rndGen_;
-	std::uniform_real_distribution<float> rndFloatDist_;
-	std::uniform_int_distribution<int> rndIntDist_;
+	Random rnd_;
 };
 
 }

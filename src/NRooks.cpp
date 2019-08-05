@@ -15,7 +15,7 @@ void NRooks::generateSamples()
 	for (int p = 0; p < numSets_; p++)
 		for (int i = 0; i < numSamples_; i++)
 		{
-			Vector2 sp((i + rndFloatDist_(rndGen_)) / numSamples_, (i + rndFloatDist_(rndGen_)) / numSamples_);
+			Vector2 sp((i + rnd_.real()) / numSamples_, (i + rnd_.real()) / numSamples_);
 			samples_.push_back(sp);
 		}
 
@@ -28,7 +28,7 @@ void NRooks::shuffleXCoords()
 	for (int p = 0; p < numSets_; p++)
 		for (int i = 0; i <  numSamples_ - 1; i++)
 		{
-			const int target = rndIntDist_(rndGen_) % numSamples_ + p * numSamples_;
+			const int target = rnd_.integer(0, numSamples_) + p * numSamples_;
 			const float temp = samples_[i + p * numSamples_ + 1].x;
 			samples_[i + p * numSamples_ + 1].x = samples_[target].x;
 			samples_[target].x = temp;
@@ -40,7 +40,7 @@ void NRooks::shuffleYCoords()
 	for (int p = 0; p < numSets_; p++)
 		for (int i = 0; i <  numSamples_ - 1; i++)
 		{
-			const int target = rndIntDist_(rndGen_) % numSamples_ + p * numSamples_;
+			const int target = rnd_.integer(0, numSamples_) + p * numSamples_;
 			const float temp = samples_[i + p * numSamples_ + 1].y;
 			samples_[i + p * numSamples_ + 1].y = samples_[target].y;
 			samples_[target].y = temp;

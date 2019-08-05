@@ -26,8 +26,8 @@ void MultiJittered::generateSamples(void)
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < n; j++)
 			{
-				samples_[i * n + j + p * numSamples_].x = (i * n + j) * subcellWidth + rndFloatDist_(rndGen_) * subcellWidth;
-				samples_[i * n + j + p * numSamples_].y = (j * n + i) * subcellWidth + rndFloatDist_(rndGen_) * subcellWidth;
+				samples_[i * n + j + p * numSamples_].x = (i * n + j) * subcellWidth + rnd_.real() * subcellWidth;
+				samples_[i * n + j + p * numSamples_].y = (j * n + i) * subcellWidth + rnd_.real() * subcellWidth;
 			}
 
 	// shuffle x coordinates
@@ -36,7 +36,7 @@ void MultiJittered::generateSamples(void)
 			for (int j = 0; j < n; j++)
 			{
 				// random integer between j and n - 1
-				const int k = static_cast<int>(rndFloatDist_(rndGen_) * (n - 1 - j) + j);
+				const int k = static_cast<int>(rnd_.real() * (n - 1 - j) + j);
 				const float t = samples_[i * n + j + p * numSamples_].x;
 				samples_[i * n + j + p * numSamples_].x = samples_[i * n + k + p * numSamples_].x;
 				samples_[i * n + k + p * numSamples_].x = t;
@@ -48,7 +48,7 @@ void MultiJittered::generateSamples(void)
 			for (int j = 0; j < n; j++)
 			{
 				// random integer between j and n - 1
-				const int k = static_cast<int>(rndFloatDist_(rndGen_) * (n - 1 - j) + j);
+				const int k = static_cast<int>(rnd_.real() * (n - 1 - j) + j);
 				float t = samples_[j * n + i + p * numSamples_].y;
 				samples_[j * n + i + p * numSamples_].y = samples_[k * n + i + p * numSamples_].y;
 				samples_[k * n + i + p * numSamples_].y = t;

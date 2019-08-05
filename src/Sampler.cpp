@@ -8,8 +8,7 @@ const float pi4 = 3.14159265358979323846f / 4.0f;
 namespace pm {
 
 Sampler::Sampler(int numSamples)
-	: numSamples_(numSamples), numSets_(83),
-	  rndFloatDist_(0.0f, 1.0f), rndIntDist_(0, std::numeric_limits<int>::max())
+	: numSamples_(numSamples), numSets_(83)
 {
 	samples_.reserve(numSamples_ * numSets_);
 	setupShuffleIndices();
@@ -19,7 +18,7 @@ Vector2 Sampler::sampleUnitSquare(unsigned long &count, int &jump)
 {
 	// Start of a new pixel
 	if (count % numSamples_ == 0)
-		jump = (rndIntDist_(rndGen_) % numSets_) * numSamples_;
+		jump = rnd_.integer(0, numSets_) * numSamples_;
 
 	return samples_[jump + shuffledIndices_[jump + count++ % numSamples_]];
 }
@@ -28,7 +27,7 @@ Vector2 Sampler::sampleUnitDisk(unsigned long &count, int &jump)
 {
 	// Start of a new pixel
 	if (count % numSamples_ == 0)
-		jump = (rndIntDist_(rndGen_) % numSets_) * numSamples_;
+		jump = rnd_.integer(0, numSets_) * numSamples_;
 
 	return diskSamples_[jump + shuffledIndices_[jump + count++ % numSamples_]];
 }
@@ -37,7 +36,7 @@ Vector3 Sampler::sampleHemisphere(unsigned long &count, int &jump)
 {
 	// Start of a new pixel
 	if (count % numSamples() == 0)
-		jump = (rndIntDist_(rndGen_) % numSets_) * numSamples_;
+		jump = rnd_.integer(0, numSets_) * numSamples_;
 
 	return hemisphereSamples_[jump + shuffledIndices_[jump + count++ % numSamples_]];
 }
