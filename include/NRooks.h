@@ -8,7 +8,7 @@ namespace pm {
 class NRooks : public Sampler
 {
   public:
-	explicit NRooks(int numSamples);
+	explicit NRooks(unsigned int numSamples);
 	void generateSamples() override;
 
   private:

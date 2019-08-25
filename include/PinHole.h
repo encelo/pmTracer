@@ -10,13 +10,17 @@ class PinHole : public Camera
 {
   public:
 	PinHole()
-	    : Camera(), distance_(1.0f), zoom_(1.0f) {}
+	    : Camera(Type::PINHOLE), distance_(1.0f), zoom_(1.0f) {}
 
-	inline void setViewDistance(float distance) { distance_ = distance; }
+	inline float viewDistance() const { return distance_; }
+	inline float &editViewDistance() { return distance_; }
+	inline float zoom() const { return zoom_; }
+	inline float &editZoom() { return zoom_; }
+
 	Vector3 rayDirection(float x, float y) const;
 
 	using Camera::renderScene;
-	void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive) override;
+	void renderScene(World &world, Tracer &tracer, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive) override;
 
   private:
 	/// View-plane distance

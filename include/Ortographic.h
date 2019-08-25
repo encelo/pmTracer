@@ -9,10 +9,10 @@ class Ortographic : public Camera
 {
   public:
 	Ortographic()
-	    : Camera() {}
+	    : Camera(Type::ORTOGRAPHIC) {}
 
 	using Camera::renderScene;
-	void renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive) override;
+	void renderScene(World &world, Tracer &tracer, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive) override;
 };
 
 }

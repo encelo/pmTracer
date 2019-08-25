@@ -2,9 +2,6 @@
 #include "World.h"
 #include "Vector3.h"
 #include "Ambient.h"
-#include "RayCast.h"
-#include "Whitted.h"
-#include "PathTrace.h"
 #include "Geometry.h"
 #include "Material.h"
 #include "ShadeRecord.h"
@@ -13,7 +10,6 @@ namespace pm {
 
 World::World()
     : background_(0.0f, 0.0f, 0.0f),
-      tracer_(std::make_unique<Whitted>(*this)),
       ambientLight_(std::make_unique<Ambient>(0.0f))
 {
 }
@@ -43,9 +39,18 @@ void World::addSampler(std::unique_ptr<Sampler> sampler)
 	samplers_.push_back(std::move(sampler));
 }
 
-ShadeRecord World::hitObjects(const Ray &ray) const
+void World::clear()
 {
-	ShadeRecord sr(*this);
+	background_.set(0.0f, 0.0f, 0.0f);
+	ambientLight_ = std::make_unique<Ambient>(0.0f);
+	objects_.clear();
+	materials_.clear();
+	lights_.clear();
+	samplers_.clear();
+}
+
+void World::hitObjects(const Ray &ray, ShadeRecord &sr) const
+{
 	float t;
 	Vector3 normal;
 	Vector3 localHitPoint;
@@ -71,8 +76,6 @@ ShadeRecord World::hitObjects(const Ray &ray) const
 		sr.normal = normal;
 		sr.localHitPoint = localHitPoint;
 	}
-
-	return sr;
 }
 
 }

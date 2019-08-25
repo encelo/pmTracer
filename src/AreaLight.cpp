@@ -7,7 +7,7 @@
 namespace pm {
 
 AreaLight::AreaLight(Geometry *object)
-    : object_(object), material_(static_cast<const Emissive *>(object->material()))
+    : Light(Type::AREA), object_(object), material_(static_cast<const Emissive *>(object->material()))
 {
 }
 
@@ -33,13 +33,13 @@ RGBColor AreaLight::L(ShadeRecord &sr) const
 
 bool AreaLight::inShadow(const Ray &ray, const ShadeRecord &sr) const
 {
-	float t = 0.0;
-	const size_t numObjects = sr.w.objects().size();
+	float t = 0.0f;
+	const size_t numObjects = sr.world.objects().size();
 	float ts = dot((samplePoint_ - ray.o), ray.d);
 
 	for (unsigned int i = 0; i < numObjects; i++)
 	{
-		if (sr.w.objects()[i]->shadowHit(ray, t) && t < ts)
+		if (sr.world.objects()[i]->shadowHit(ray, t) && t < ts)
 			return true;
 	}
 

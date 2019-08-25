@@ -1,6 +1,7 @@
 #include "Reflective.h"
 #include "ShadeRecord.h"
 #include "World.h"
+#include "Tracer.h"
 
 namespace pm {
 
@@ -20,7 +21,7 @@ RGBColor Reflective::shade(ShadeRecord &sr) const
 	const float nDotWi = dot(sr.normal, wi);
 	Ray reflectedRay(sr.hitPoint, wi);
 
-	L += fr * sr.w.tracer().traceRay(reflectedRay, sr.depth + 1) * nDotWi;
+	L += fr * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 1) * nDotWi;
 
 	return L;
 }
@@ -37,7 +38,7 @@ RGBColor Reflective::areaLightShade(ShadeRecord &sr) const
 	const float nDotWi = dot(sr.normal, wi);
 	Ray reflectedRay(sr.hitPoint, wi);
 
-	L += fr * sr.w.tracer().traceRay(reflectedRay, sr.depth + 1) * nDotWi / pdf;
+	L += fr * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 1) * nDotWi / pdf;
 
 	return L;
 }
@@ -51,7 +52,7 @@ RGBColor Reflective::pathShade(ShadeRecord &sr) const
 	const float nDotWi = dot(sr.normal, wi);
 	Ray reflectedRay(sr.hitPoint, wi);
 
-	return fr * sr.w.tracer().traceRay(reflectedRay, sr.depth + 1) * nDotWi / pdf;
+	return fr * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 1) * nDotWi / pdf;
 }
 
 RGBColor Reflective::globalShade(ShadeRecord &sr) const
@@ -64,9 +65,9 @@ RGBColor Reflective::globalShade(ShadeRecord &sr) const
 	Ray reflectedRay(sr.hitPoint, wi);
 
 	if (sr.depth == 0)
-		return fr * sr.w.tracer().traceRay(reflectedRay, sr.depth + 2) * nDotWi / pdf;
+		return fr * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 2) * nDotWi / pdf;
 	else
-		return fr * sr.w.tracer().traceRay(reflectedRay, sr.depth + 1) * nDotWi / pdf;
+		return fr * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 1) * nDotWi / pdf;
 }
 
 }

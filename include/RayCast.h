@@ -8,10 +8,10 @@ namespace pm {
 class RayCast : public Tracer
 {
   public:
-	RayCast(World &world)
-	    : Tracer(world) {}
+	RayCast()
+	    : Tracer(Type::RAYCAST) {}
 
-	RGBColor traceRay(const Ray &ray, int depth) const override;
+	RGBColor traceRay(const World &world, const Ray &ray, int depth) const override;
 };
 
 }

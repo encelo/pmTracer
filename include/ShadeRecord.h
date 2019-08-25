@@ -9,6 +9,7 @@ namespace pm {
 
 class Material;
 class World;
+class Tracer;
 
 class ShadeRecord
 {
@@ -32,10 +33,13 @@ class ShadeRecord
 	/// Ray parameter
 	float t;
 	/// Reference to the world
-	const World &w;
+	const World &world;
+	/// Reference to the tracer
+	const Tracer &tracer;
 
-	ShadeRecord(const World &wr)
-	    : hitAnObject(false), material(nullptr), w(wr) {}
+	ShadeRecord(const World &wr, const Tracer &tr)
+	    : hitAnObject(false), material(nullptr),
+	      depth(0), t(0.0f), world(wr), tracer(tr) {}
 };
 
 }

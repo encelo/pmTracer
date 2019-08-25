@@ -8,7 +8,7 @@
 namespace pm {
 
 AmbientOccluder::AmbientOccluder()
-    : Light(), u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f),
+    : Light(Type::AMBIENT_OCCLUDER), u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f),
       ls_(1.0f), color_(1.0f, 1.0f, 1.0f), minAmount_(1.0f)
 {
 }
@@ -38,11 +38,11 @@ RGBColor AmbientOccluder::L(ShadeRecord &sr) const
 inline bool AmbientOccluder::inShadow(const Ray &ray, const ShadeRecord &sr) const
 {
 	float t;
-	const size_t numObjects = sr.w.objects().size();
+	const size_t numObjects = sr.world.objects().size();
 
-	for (int i = 0; i < numObjects; i++)
+	for (unsigned int i = 0; i < numObjects; i++)
 	{
-		if (sr.w.objects()[i]->shadowHit(ray, t))
+		if (sr.world.objects()[i]->shadowHit(ray, t))
 			return true;
 	}
 

@@ -8,11 +8,8 @@ namespace pm {
 class Hammersley : public Sampler
 {
   public:
-	explicit Hammersley(int numSamples);
+	explicit Hammersley(unsigned int numSamples);
 	void generateSamples() override;
-
-  private:
-	float phi(int i);
 };
 
 }

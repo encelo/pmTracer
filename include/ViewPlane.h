@@ -15,20 +15,22 @@ class ViewPlane
 	      invGamma_(1.0f / gamma_), maxDepth_(1) {}
 
 	inline int width() const { return width_; }
-	inline void setWidth(int width) { width_ = width; }
+	inline int &editWidth() { return width_; }
 	inline int height() const { return height_; }
-	inline void setHeight(int height) { height_ = height; }
+	inline int &editHeight() { return height_; }
 	void setDimensions(int width, int height);
 
 	inline float pixelSize() const { return pixelSize_; }
-	inline void setPixelSize(float pixelSize) { pixelSize_ = pixelSize; }
+	inline float &editPixelSize() { return pixelSize_; }
 	inline float gamma() const { return gamma_; }
 	void setGamma(float gamma);
 	inline int maxDepth() const { return maxDepth_; }
-	inline void setMaxDepth(int maxDepth) { maxDepth_ = maxDepth; }
+	inline int &editMaxDepth() { return maxDepth_; }
 
-	inline SamplerState &samplerState() { return samplerState_; }
 	inline const SamplerState &samplerState() const { return samplerState_; }
+
+	const Sampler *sampler() const { return samplerState_.sampler(); }
+	Sampler *sampler() { return samplerState_.sampler(); }
 	inline void setSampler(Sampler *sampler) { samplerState_.setSampler(sampler); }
 
   private:

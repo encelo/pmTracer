@@ -5,9 +5,10 @@
 
 namespace pm {
 
-RGBColor RayCast::traceRay(const Ray &ray, int depth) const
+RGBColor RayCast::traceRay(const World &world, const Ray &ray, int depth) const
 {
-	ShadeRecord sr(world_.hitObjects(ray));
+	ShadeRecord sr(world, *this);
+	world.hitObjects(ray, sr);
 
 	if (sr.hitAnObject)
 	{
@@ -15,7 +16,7 @@ RGBColor RayCast::traceRay(const Ray &ray, int depth) const
 		return sr.material->shade(sr);
 	}
 	else
-		return world_.background();
+		return world.background();
 }
 
 }

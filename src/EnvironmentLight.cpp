@@ -8,8 +8,9 @@
 namespace pm {
 
 EnvironmentLight::EnvironmentLight(Emissive *material)
-    : material_(material),
-      u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f)
+    : Light(Type::ENVIRONMENT),
+      u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f),
+      material_(material)
 {
 }
 
@@ -33,11 +34,11 @@ RGBColor EnvironmentLight::L(ShadeRecord &sr) const
 bool EnvironmentLight::inShadow(const Ray &ray, const ShadeRecord &sr) const
 {
 	float t;
-	const size_t numObjects = sr.w.objects().size();
+	const size_t numObjects = sr.world.objects().size();
 
-	for (int i = 0; i < numObjects; i++)
+	for (unsigned int i = 0; i < numObjects; i++)
 	{
-		if (sr.w.objects()[i]->shadowHit(ray, t))
+		if (sr.world.objects()[i]->shadowHit(ray, t))
 			return true;
 	}
 

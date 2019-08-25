@@ -5,7 +5,7 @@
 namespace pm {
 
 Emissive::Emissive()
-    : Material(), ls_(1.0f), ce_(1.0f, 1.0f, 1.0f)
+    : Material(Type::EMISSIVE), ls_(1.0f), ce_(1.0f, 1.0f, 1.0f)
 {
 }
 

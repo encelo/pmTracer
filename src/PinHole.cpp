@@ -2,10 +2,11 @@
 #include "Ray.h"
 #include "RGBColor.h"
 #include "World.h"
+#include "Tracer.h"
 
 namespace pm {
 
-void PinHole::renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive)
+void PinHole::renderScene(World &world, Tracer &tracer, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive)
 {
 	Ray ray;
 	ray.o = eye_;
@@ -26,7 +27,7 @@ void PinHole::renderScene(World &world, RGBColor *frame, int startX, int startY,
 				const float x = pixelSize * (c - 0.5f * vp.width() + sp.x);
 				const float y = pixelSize * (r - 0.5f * vp.height() + sp.y);
 				ray.d = rayDirection(x, y);
-				pixel += world.tracer().traceRay(ray, depth);
+				pixel += tracer.traceRay(world, ray, depth);
 			}
 			// Divide by number of samples even in progressive mode or the image gets too bright
 			pixel /= static_cast<float>(vp.samplerState().numSamples());

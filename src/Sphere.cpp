@@ -6,7 +6,6 @@ namespace pm {
 bool Sphere::hit(const Ray &ray, float &tMin, ShadeRecord &sr) const
 {
 	bool hasHit = false;
-	float t = 0.0f;
 	Vector3 temp = ray.o - center_;
 	float a = dot(ray.d, ray.d);
 	float b = 2.0f * dot(temp, ray.d);
@@ -15,6 +14,7 @@ bool Sphere::hit(const Ray &ray, float &tMin, ShadeRecord &sr) const
 
 	if (disc > 0.0f)
 	{
+		float t = 0.0f;
 		float e = sqrtf(disc);
 		float denom = 2.0f * a;
 
@@ -48,7 +48,6 @@ bool Sphere::shadowHit(const Ray &ray, float &tMin) const
 		return false;
 
 	bool hasHit = false;
-	float t = 0.0f;
 	Vector3 temp = ray.o - center_;
 	float a = dot(ray.d, ray.d);
 	float b = 2.0f * dot(temp, ray.d);
@@ -57,6 +56,7 @@ bool Sphere::shadowHit(const Ray &ray, float &tMin) const
 
 	if (disc > 0.0f)
 	{
+		float t = 0.0f;
 		float e = sqrtf(disc);
 		float denom = 2.0f * a;
 

@@ -8,10 +8,10 @@ namespace pm {
 class Whitted : public Tracer
 {
   public:
-	Whitted(World &world)
-	    : Tracer(world) {}
+	Whitted()
+	    : Tracer(Type::WHITTED) {}
 
-	RGBColor traceRay(const Ray &ray, int depth) const override;
+	RGBColor traceRay(const World &world, const Ray &ray, int depth) const override;
 };
 
 }

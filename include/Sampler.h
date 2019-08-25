@@ -11,8 +11,21 @@ namespace pm {
 class Sampler
 {
   public:
-	Sampler(int numSamples);
+	enum class Type
+	{
+		REGULAR,
+		PURE_RANDOM,
+		JITTERED,
+		MULTI_JITTERED,
+		NROOKS,
+		HAMMERSLEY,
+		HALTON
+	};
+
+	Sampler(Type type, unsigned int numSamples);
 	virtual ~Sampler() {}
+
+	inline Type type() const { return type_; }
 
 	/// Returns next sample on unit square
 	Vector2 sampleUnitSquare(unsigned long &count, int &jump);
@@ -28,16 +41,22 @@ class Sampler
 	/// Randomly shuffles the samples in each pattern
 	void shuffleSamples();
 
-	inline int numSamples() const { return numSamples_; }
+	void resize(unsigned int numSamples);
+
+	inline unsigned int numSamples() const { return numSamples_; }
+	inline unsigned int numSets() const { return numSets_; }
 
 	void mapSamplesToDisk();
 	void mapSamplesToHemisphere(float e);
 
+  private:
+	Type type_;
+
   protected:
 	/// The number of samples points in a pattern
-	int numSamples_;
+	unsigned int numSamples_;
 	/// The number of sample sets (patterns) stored
-	int numSets_;
+	unsigned int numSets_;
 	/// Sample points on a unit square
 	std::vector<Vector2> samples_;
 	/// Sample points on a unit disc
@@ -45,7 +64,7 @@ class Sampler
 	/// Sample points on a unit hemisphere
 	std::vector<Vector3> hemisphereSamples_;
 	/// Shuffled samples array indices
-	std::vector<int> shuffledIndices_;
+	std::vector<unsigned int> shuffledIndices_;
 
 	Random rnd_;
 };

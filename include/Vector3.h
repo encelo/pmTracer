@@ -16,11 +16,17 @@ class Vector3
 	    : x(0.0), y(0.0), z(0.0) {}
 	Vector3(float xx, float yy, float zz)
 	    : x(xx), y(yy), z(zz) {}
-	Vector3(float *vec)
+	explicit Vector3(float *vec)
 	    : x(vec[0]), y(vec[1]), z(vec[2]) {}
+	Vector3(const Vector3 &other)
+	    : x(other.x), y(other.y), z(other.z) {}
+	Vector3 &operator=(const Vector3 &other);
 
 	void set(float xx, float yy, float zz);
 	void set(float *vec);
+
+	inline float *data() { return &x; }
+	const float *data() const { return &x; }
 
 	Vector3 operator-() const;
 
@@ -43,6 +49,15 @@ class Vector3
 	friend float dot(const Vector3 &v1, const Vector3 &v2);
 	friend Vector3 cross(const Vector3 &v1, const Vector3 &v2);
 };
+
+inline Vector3 &Vector3::operator=(const Vector3 &other)
+{
+	x = other.x;
+	y = other.y;
+	z = other.z;
+
+	return *this;
+}
 
 inline void Vector3::set(float xx, float yy, float zz)
 {

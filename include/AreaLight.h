@@ -12,7 +12,7 @@ class Emissive;
 class AreaLight : public Light
 {
   public:
-	AreaLight(Geometry *object);
+	explicit AreaLight(Geometry *object);
 
 	Vector3 direction(ShadeRecord &sr) const override;
 	RGBColor L(ShadeRecord &sr) const override;
@@ -21,11 +21,12 @@ class AreaLight : public Light
 	float G(const ShadeRecord &sr) const override;
 	float pdf(ShadeRecord &sr) const override;
 
-	inline Geometry &object() const { return *object_; }
+	inline const Geometry &object() const { return *object_; }
+	inline Geometry &object() { return *object_; }
 
   private:
 	Geometry *object_;
-	/// An emissive material
+	/// A constant pointer to the emissive material of the object
 	const Emissive *material_;
 	/// Sample point on the surface
 	mutable Vector3 samplePoint_;

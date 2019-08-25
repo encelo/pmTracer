@@ -8,10 +8,10 @@ namespace pm {
 class GlobalTrace : public Tracer
 {
   public:
-	GlobalTrace(World &world)
-	    : Tracer(world) {}
+	GlobalTrace()
+	    : Tracer(Type::GLOBALTRACE) {}
 
-	RGBColor traceRay(const Ray &ray, int depth) const override;
+	RGBColor traceRay(const World &world, const Ray &ray, int depth) const override;
 };
 
 }

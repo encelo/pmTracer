@@ -8,11 +8,8 @@ namespace pm {
 class Halton : public Sampler
 {
   public:
-	explicit Halton(int numSamples);
+	explicit Halton(unsigned int numSamples);
 	void generateSamples() override;
-
-  private:
-	float phi(int i, float base);
 };
 
 }

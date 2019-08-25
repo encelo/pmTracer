@@ -31,19 +31,19 @@ void Camera::computeUvw()
 #endif
 }
 
-void Camera::renderScene(World &world, RGBColor *frame)
+void Camera::renderScene(World &world, Tracer &tracer, RGBColor *frame)
 {
-	renderScene(world, frame, 0, 0, world.viewPlane().width(), world.viewPlane().height());
+	renderScene(world, tracer, frame, 0, 0, world.viewPlane().width(), world.viewPlane().height());
 }
 
-void Camera::renderScene(World &world, RGBColor *frame, int startX, int startY, int tileSize)
+void Camera::renderScene(World &world, Tracer &tracer, RGBColor *frame, int startX, int startY, int tileSize)
 {
-	renderScene(world, frame, startX, startY, tileSize, tileSize);
+	renderScene(world, tracer, frame, startX, startY, tileSize, tileSize);
 }
 
-void Camera::renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight)
+void Camera::renderScene(World &world, Tracer &tracer, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight)
 {
-	renderScene(world, frame, startX, startY, tileWidth, tileHeight, false);
+	renderScene(world, tracer, frame, startX, startY, tileWidth, tileHeight, false);
 }
 
 }

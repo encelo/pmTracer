@@ -22,6 +22,9 @@ class BRDF
 	virtual RGBColor rho(const ShadeRecord &sr, const Vector3 &wo) const { return RGBColor(0.0f, 0.0f, 0.0f); }
 
 	inline SamplerState &samplerState() { return samplerState_; }
+
+	const Sampler *sampler() const { return samplerState_.sampler(); }
+	Sampler *sampler() { return samplerState_.sampler(); }
 	void setSampler(Sampler *sampler);
 
   protected:

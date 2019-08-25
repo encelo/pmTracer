@@ -1,7 +1,6 @@
 #ifndef PMTRACER_MATTE_H
 #define PMTRACER_MATTE_H
 
-#include <memory>
 #include "Material.h"
 #include "Lambertian.h"
 
@@ -14,7 +13,7 @@ class Matte : public Material
 
 	void setKa(float ka);
 	void setKd(float kd);
-	void setCd(const RGBColor &color);
+	void setCd(const RGBColor &c);
 	void setCd(float r, float g, float b);
 
 	RGBColor shade(ShadeRecord &sr) const override;
@@ -22,12 +21,14 @@ class Matte : public Material
 	RGBColor pathShade(ShadeRecord &sr) const override;
 	RGBColor globalShade(ShadeRecord &sr) const override;
 
-	inline Lambertian &ambient() { return *ambientBrdf_; }
-	inline Lambertian &diffuse() { return *diffuseBrdf_; }
+	inline const Lambertian &ambient() const { return ambientBrdf_; }
+	inline Lambertian &ambient() { return ambientBrdf_; }
+	inline const Lambertian &diffuse() const { return diffuseBrdf_; }
+	inline Lambertian &diffuse() { return diffuseBrdf_; }
 
   private:
-	std::unique_ptr<Lambertian> ambientBrdf_;
-	std::unique_ptr<Lambertian> diffuseBrdf_;
+	Lambertian ambientBrdf_;
+	Lambertian diffuseBrdf_;
 };
 
 }

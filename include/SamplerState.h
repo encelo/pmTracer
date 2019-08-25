@@ -12,7 +12,7 @@ class SamplerState
 {
   public:
 	SamplerState();
-	SamplerState(Sampler *sampler);
+	explicit SamplerState(Sampler *sampler);
 
 	int numSamples() const;
 
@@ -24,6 +24,7 @@ class SamplerState
 	Vector3 sampleHemisphere() const;
 
 	inline const Sampler *sampler() const { return sampler_; }
+	inline Sampler *sampler() { return sampler_; }
 	inline void setSampler(Sampler *sampler) { sampler_ = sampler; }
 
   private:

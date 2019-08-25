@@ -8,10 +8,10 @@ namespace pm {
 class PathTrace : public Tracer
 {
   public:
-	PathTrace(World &world)
-	    : Tracer(world) {}
+	PathTrace()
+	    : Tracer(Type::PATHTRACE) {}
 
-	RGBColor traceRay(const Ray &ray, int depth) const override;
+	RGBColor traceRay(const World &world, const Ray &ray, int depth) const override;
 };
 
 }

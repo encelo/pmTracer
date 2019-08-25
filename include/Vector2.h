@@ -13,11 +13,17 @@ class Vector2
 	    : x(0.0), y(0.0) {}
 	Vector2(float xx, float yy)
 	    : x(xx), y(yy) {}
-	Vector2(float *vec)
+	explicit Vector2(float *vec)
 	    : x(vec[0]), y(vec[1]) {}
+	Vector2(const Vector2 &other)
+	    : x(other.x), y(other.y) {}
+	Vector2 &operator=(const Vector2 &other);
 
 	void set(float xx, float yy);
 	void set(float *vec);
+
+	inline float *data() { return &x; }
+	const float *data() const { return &x; }
 
 	Vector2 operator-() const;
 
@@ -32,6 +38,14 @@ class Vector2
 	friend Vector2 operator*(float s, const Vector2 &v);
 	friend Vector2 operator/(float s, const Vector2 &v);
 };
+
+inline Vector2 &Vector2::operator=(const Vector2 &other)
+{
+	x = other.x;
+	y = other.y;
+
+	return *this;
+}
 
 inline void Vector2::set(float xx, float yy)
 {

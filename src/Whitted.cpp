@@ -5,13 +5,14 @@
 
 namespace pm {
 
-RGBColor Whitted::traceRay(const Ray &ray, int depth) const
+RGBColor Whitted::traceRay(const World &world, const Ray &ray, int depth) const
 {
-	if (depth > world_.viewPlane().maxDepth())
+	if (depth > world.viewPlane().maxDepth())
 		return RGBColor(0.0f, 0.0f, 0.0f);
 	else
 	{
-		ShadeRecord sr(world_.hitObjects(ray));
+		ShadeRecord sr(world, *this);
+		world.hitObjects(ray, sr);
 
 		if (sr.hitAnObject)
 		{
@@ -20,7 +21,7 @@ RGBColor Whitted::traceRay(const Ray &ray, int depth) const
 			return sr.material->shade(sr);
 		}
 		else
-			return world_.background();
+			return world.background();
 	}
 }
 

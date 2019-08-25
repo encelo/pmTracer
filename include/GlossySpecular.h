@@ -15,13 +15,16 @@ class GlossySpecular : public BRDF
 	RGBColor f(const ShadeRecord &sr, const Vector3 &wi, const Vector3 &wo) const override;
 
 	inline float ks() const { return ks_; }
+	inline float &editKs() { return ks_; }
 	inline void setKs(float ks) { ks_ = ks; }
 
 	inline const RGBColor &cs() const { return cs_; }
+	inline RGBColor &editCs() { return cs_; }
 	inline void setCs(float r, float g, float b) { cs_.set(r, g, b); }
 	inline void setCs(const RGBColor &color) { cs_ = color; }
 
 	inline float exp() const { return exp_; }
+	inline float &editExp() { return exp_; }
 	inline void setExp(float exp) { exp_ = exp; }
 
   private:
@@ -36,11 +39,11 @@ inline RGBColor GlossySpecular::f(const ShadeRecord &sr, const Vector3 &wi, cons
 {
 	RGBColor L;
 	const float nDotWi = dot(sr.normal, wi);
-	Vector3 r(-wi + 2.0 * sr.normal * nDotWi);
+	Vector3 r(-wi + 2.0f * sr.normal * nDotWi);
 	const float rDotWo = dot(r, wo);
 
-	if (rDotWo > 0.0)
-		L = ks_ * cs_ * pow(rDotWo, exp_);
+	if (rDotWo > 0.0f)
+		L = ks_ * cs_ * powf(rDotWo, exp_);
 
 	return L;
 }

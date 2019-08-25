@@ -16,8 +16,14 @@ class RGBColor
 	    : r(0.0f), g(0.0f), b(0.0f) {}
 	RGBColor(float rr, float gg, float bb)
 	    : r(rr), g(gg), b(bb) {}
+	RGBColor(const RGBColor &other)
+	    : r(other.r), g(other.g), b(other.b) {}
+	RGBColor &operator=(const RGBColor &other);
 
 	void set(float rr, float gg, float bb);
+
+	inline float *data() { return &r; }
+	const float *data() const { return &r; }
 
 	RGBColor &operator+=(const RGBColor &c);
 	RGBColor &operator-=(const RGBColor &c);
@@ -38,6 +44,15 @@ class RGBColor
 
 	RGBColor &pow(float exp);
 };
+
+inline RGBColor &RGBColor::operator=(const RGBColor &other)
+{
+	r = other.r;
+	g = other.g;
+	b = other.b;
+
+	return *this;
+}
 
 inline void RGBColor::set(float rr, float gg, float bb)
 {

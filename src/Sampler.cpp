@@ -7,8 +7,8 @@ const float pi4 = 3.14159265358979323846f / 4.0f;
 
 namespace pm {
 
-Sampler::Sampler(int numSamples)
-    : numSamples_(numSamples), numSets_(83)
+Sampler::Sampler(Type type, unsigned int numSamples)
+    : type_(type), numSamples_(numSamples), numSets_(83)
 {
 	samples_.reserve(numSamples_ * numSets_);
 	setupShuffleIndices();
@@ -44,19 +44,34 @@ Vector3 Sampler::sampleHemisphere(unsigned long &count, int &jump)
 void Sampler::setupShuffleIndices()
 {
 	shuffledIndices_.reserve(numSamples_ * numSets_);
-	std::vector<int> indices;
+	std::vector<unsigned int> indices;
 	indices.reserve(numSamples_);
 
-	for (int i = 0; i < numSamples_; i++)
+	for (unsigned int i = 0; i < numSamples_; i++)
 		indices.push_back(i);
 
-	for (int p = 0; p < numSets_; p++)
+	for (unsigned int p = 0; p < numSets_; p++)
 	{
 		std::random_shuffle(indices.begin(), indices.end());
 
-		for (int i = 0; i < numSamples_; i++)
+		for (unsigned int i = 0; i < numSamples_; i++)
 			shuffledIndices_.push_back(indices[i]);
 	}
+}
+
+void Sampler::resize(unsigned int numSamples)
+{
+	samples_.clear();
+	diskSamples_.clear();
+	hemisphereSamples_.clear();
+
+	samples_.reserve(numSamples_ * numSets_);
+	generateSamples();
+
+	shuffledIndices_.clear();
+	setupShuffleIndices();
+
+	numSamples_ = numSamples;
 }
 
 void Sampler::mapSamplesToDisk()
@@ -70,7 +85,7 @@ void Sampler::mapSamplesToDisk()
 
 	diskSamples_.reserve(size);
 
-	for (int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		// map sample point to [-1, 1]
 		sp.x = 2.0f * samples_[i].x - 1.0f;
@@ -127,7 +142,7 @@ void Sampler::mapSamplesToHemisphere(float e)
 	const size_t size = samples_.size();
 	hemisphereSamples_.reserve(numSamples_ * numSets_);
 
-	for (int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		const float cosPhi = cosf(2.0f * pi * samples_[i].x);
 		const float sinPhi = sinf(2.0f * pi * samples_[i].x);

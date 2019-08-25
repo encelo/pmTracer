@@ -2,10 +2,11 @@
 #include "Ray.h"
 #include "RGBColor.h"
 #include "World.h"
+#include "Tracer.h"
 
 namespace pm {
 
-void Ortographic::renderScene(World &world, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive)
+void Ortographic::renderScene(World &world, Tracer &tracer, RGBColor *frame, int startX, int startY, int tileWidth, int tileHeight, bool progressive)
 {
 	Ray ray;
 	ray.d = Vector3(0.0f, 0.0f, -1.0f);
@@ -24,7 +25,7 @@ void Ortographic::renderScene(World &world, RGBColor *frame, int startX, int sta
 				const float x = vp.pixelSize() * (c - 0.5f * vp.width() + sp.x);
 				const float y = vp.pixelSize() * (r - 0.5f * vp.height() + sp.y);
 				ray.o = Vector3(x, y, zw);
-				pixel += world.tracer().traceRay(ray, 0);
+				pixel += tracer.traceRay(world, ray, 0);
 			}
 			// Divide by number of samples even in progressive mode or the image gets too bright
 			pixel /= static_cast<float>(vp.samplerState().numSamples());

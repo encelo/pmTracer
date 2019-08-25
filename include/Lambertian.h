@@ -19,9 +19,11 @@ class Lambertian : public BRDF
 	RGBColor rho(const ShadeRecord &sr, const Vector3 &wo) const override;
 
 	inline float kd() const { return kd_; }
+	inline float &editKd() { return kd_; }
 	inline void setKd(float kd) { kd_ = kd; }
 
 	inline const RGBColor &cd() const { return cd_; }
+	inline RGBColor &editCd() { return cd_; }
 	inline void setCd(float r, float g, float b) { cd_.set(r, g, b); }
 	inline void setCd(const RGBColor &color) { cd_ = color; }
 
