@@ -13,7 +13,7 @@ class Vector3
 	float z;
 
 	Vector3()
-	    : x(0.0), y(0.0), z(0.0) {}
+	    : x(0.0f), y(0.0f), z(0.0f) {}
 	Vector3(float xx, float yy, float zz)
 	    : x(xx), y(yy), z(zz) {}
 	explicit Vector3(float *vec)
@@ -29,6 +29,11 @@ class Vector3
 	const float *data() const { return &x; }
 
 	Vector3 operator-() const;
+
+	Vector3 &operator+=(const Vector3 &v);
+	Vector3 &operator-=(const Vector3 &v);
+	Vector3 &operator*=(const Vector3 &v);
+	Vector3 &operator/=(const Vector3 &v);
 
 	Vector3 operator+(const Vector3 &v) const;
 	Vector3 operator-(const Vector3 &v) const;
@@ -75,6 +80,42 @@ inline void Vector3::set(float *vec)
 inline Vector3 Vector3::operator-() const
 {
 	return Vector3(-x, -y, -z);
+}
+
+inline Vector3 &Vector3::operator+=(const Vector3 &v)
+{
+	x += v.x;
+	y += v.y;
+	z += v.z;
+
+	return *this;
+}
+
+inline Vector3 &Vector3::operator-=(const Vector3 &v)
+{
+	x -= v.x;
+	y -= v.y;
+	z -= v.z;
+
+	return *this;
+}
+
+inline Vector3 &Vector3::operator*=(const Vector3 &v)
+{
+	x *= v.x;
+	y *= v.y;
+	z *= v.z;
+
+	return *this;
+}
+
+inline Vector3 &Vector3::operator/=(const Vector3 &v)
+{
+	x /= v.x;
+	y /= v.y;
+	z /= v.z;
+
+	return *this;
 }
 
 inline Vector3 Vector3::operator+(const Vector3 &v) const

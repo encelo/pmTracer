@@ -12,8 +12,8 @@ class Geometry
   public:
 	enum class Type
 	{
-		SPHERE,
 		PLANE,
+		SPHERE,
 		RECTANGLE
 	};
 

@@ -1,105 +1,60 @@
 cmake_minimum_required (VERSION 3.0)
 project(pmTracer)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
+
 find_package(Threads)
 
-set(HEADERS
-	include/Ray.h
-	include/Random.h
-	include/Vector2.h
-	include/Vector3.h
-	include/RGBColor.h
-	include/Geometry.h
-	include/Plane.h
-	include/Sphere.h
-	include/Rectangle.h
-	include/World.h
-	include/Tracer.h
-	include/RayCast.h
-	include/Whitted.h
-	include/AreaLighting.h
-	include/PathTrace.h
-	include/GlobalTrace.h
-	include/Sampler.h
-	include/SamplerState.h
-	include/Regular.h
-	include/PureRandom.h
-	include/Jittered.h
-	include/MultiJittered.h
-	include/NRooks.h
-	include/Hammersley.h
-	include/Halton.h
-	include/ViewPlane.h
-	include/Camera.h
-	include/Ortographic.h
-	include/PinHole.h
-	include/ShadeRecord.h
-	include/Material.h
-	include/BRDF.h
-	include/Matte.h
-	include/Phong.h
-	include/Lambertian.h
-	include/Reflective.h
-	include/PerfectSpecular.h
-	include/GlossySpecular.h
-	include/Emissive.h
-	include/AmbientOccluder.h
-	include/Light.h
-	include/Directional.h
-	include/PointLight.h
-	include/Ambient.h
-	include/AreaLight.h
-	include/EnvironmentLight.h
-)
+include(pmtracer_headers)
+include(pmtracer_sources)
 
-set(SOURCES
-	src/Random.cpp
-	src/Plane.cpp
-	src/Sphere.cpp
-	src/Rectangle.cpp
-	src/World.cpp
-	src/RayCast.cpp
-	src/Whitted.cpp
-	src/AreaLighting.cpp
-	src/PathTrace.cpp
-	src/GlobalTrace.cpp
-	src/Sampler.cpp
-	src/SamplerState.cpp
-	src/Regular.cpp
-	src/PureRandom.cpp
-	src/Jittered.cpp
-	src/MultiJittered.cpp
-	src/NRooks.cpp
-	src/Hammersley.cpp
-	src/Halton.cpp
-	src/Camera.cpp
-	src/Ortographic.cpp
-	src/PinHole.cpp
-	src/BRDF.cpp
-	src/Matte.cpp
-	src/Phong.cpp
-	src/Reflective.cpp
-	src/Emissive.cpp
-	src/AmbientOccluder.cpp
-	src/AreaLight.cpp
-	src/EnvironmentLight.cpp
-)
-
-add_library(pmTracer ${HEADERS} ${SOURCES})
+add_library(pmTracer ${PMTRACER_HEADERS} ${PMTRACER_SOURCES})
 target_include_directories(pmTracer PUBLIC "${CMAKE_SOURCE_DIR}/include")
 
 add_executable(trace main.cpp)
-target_link_libraries (trace pmTracer ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(trace pmTracer ${CMAKE_THREAD_LIBS_INIT})
 
-if(CMAKE_BUILD_TYPE MATCHES "Release")
-	if(MSVC)
-		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /Qpar")
-		#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Qvec-report:2 /Qpar-report:2")
-	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast -funsafe-loop-optimizations -ftree-loop-if-convert-stores")
-		#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fopt-info-vec-optimized")
-	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast -fslp-vectorize-aggressive")
-		#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Rpass=loop-vectorize -Rpass-analysis=loop-vectorize")
+target_compile_definitions(pmTracer PRIVATE "$<$<CONFIG:Debug>:PMTRACER_DEBUG>")
+
+if(MSVC)
+	target_compile_options(pmTracer PRIVATE $<$<CONFIG:Release>:/fp:fast /Ox /Qpar>)
+
+	if(LINKTIME_OPTIMIZATION)
+		target_compile_options(pmTracer PRIVATE $<$<CONFIG:Release>:/GL>)
+		target_link_options(pmTracer PRIVATE $<$<CONFIG:Release>:/LTCG>)
+	endif()
+
+	if(AUTOVECTORIZATION_REPORT)
+		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Qvec-report:2 /Qpar-report:2")
+	endif()
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+	target_compile_options(pmTracer PRIVATE -fdiagnostics-color=auto)
+	target_compile_options(pmTracer PRIVATE -Wall -pedantic -Wextra -Wold-style-cast -Wno-long-long -Wno-unused-parameter -Wno-ignored-qualifiers -Wno-variadic-macros)
+	target_compile_options(pmTracer PRIVATE -fvisibility=hidden -fvisibility-inlines-hidden)
+
+	target_compile_options(pmTracer PRIVATE $<$<CONFIG:Release>:-Ofast -funsafe-loop-optimizations -ftree-loop-if-convert-stores>)
+
+	if(LINKTIME_OPTIMIZATION)
+		target_compile_options(pmTracer PRIVATE $<$<CONFIG:Release>:-flto=auto>)
+		target_link_options(pmTracer PRIVATE $<$<CONFIG:Release>:-flto=auto>)
+	endif()
+
+	if(AUTOVECTORIZATION_REPORT)
+		target_link_options(pmTracer PRIVATE $<$<CONFIG:Release>:-fopt-info-vec-optimized>)
+	endif()
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+	target_compile_options(pmTracer PRIVATE -fcolor-diagnostics)
+	target_compile_options(pmTracer PRIVATE -Wall -pedantic -Wextra -Wold-style-cast -Wno-gnu-zero-variadic-macro-arguments -Wno-unused-parameter -Wno-variadic-macros -Wno-c++11-long-long -Wno-missing-braces)
+	target_link_options(pmTracer PRIVATE -Wl,--no-undefined)
+
+	target_compile_options(pmTracer PRIVATE $<$<CONFIG:Release>:-Ofast>)
+
+	if(LINKTIME_OPTIMIZATION)
+		target_compile_options(pmTracer PRIVATE $<$<CONFIG:Release>:-flto>)
+		target_link_options(pmTracer PRIVATE $<$<CONFIG:Release>:-flto>)
+	endif()
+
+	if(AUTOVECTORIZATION_REPORT)
+		target_compile_options(pmTracer PRIVATE $<$<CONFIG:Release>:-Rpass=loop-vectorize -Rpass-analysis=loop-vectorize>)
 	endif()
 endif()
