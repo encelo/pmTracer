@@ -19,7 +19,7 @@ RGBColor Reflective::shade(ShadeRecord &sr) const
 	Vector3 wi;
 	RGBColor fr = reflectiveBrdf_->sampleF(sr, wo, wi);
 	const float nDotWi = dot(sr.normal, wi);
-	Ray reflectedRay(sr.hitPoint, wi);
+	const Ray reflectedRay(sr.hitPoint, wi);
 
 	L += fr * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 1) * nDotWi;
 
@@ -36,7 +36,7 @@ RGBColor Reflective::areaLightShade(ShadeRecord &sr) const
 	float pdf = 0.0f;
 	const RGBColor fr = reflectiveBrdf_->sampleF(sr, wo, wi, pdf);
 	const float nDotWi = dot(sr.normal, wi);
-	Ray reflectedRay(sr.hitPoint, wi);
+	const Ray reflectedRay(sr.hitPoint, wi);
 
 	L += fr * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 1) * nDotWi / pdf;
 
@@ -50,7 +50,7 @@ RGBColor Reflective::pathShade(ShadeRecord &sr) const
 	float pdf = 0.0f;
 	const RGBColor fr = reflectiveBrdf_->sampleF(sr, wo, wi, pdf);
 	const float nDotWi = dot(sr.normal, wi);
-	Ray reflectedRay(sr.hitPoint, wi);
+	const Ray reflectedRay(sr.hitPoint, wi);
 
 	return fr * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 1) * nDotWi / pdf;
 }
@@ -62,7 +62,7 @@ RGBColor Reflective::globalShade(ShadeRecord &sr) const
 	float pdf = 0.0f;
 	const RGBColor fr = reflectiveBrdf_->sampleF(sr, wo, wi, pdf);
 	const float nDotWi = dot(sr.normal, wi);
-	Ray reflectedRay(sr.hitPoint, wi);
+	const Ray reflectedRay(sr.hitPoint, wi);
 
 	if (sr.depth == 0)
 		return fr * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 2) * nDotWi / pdf;

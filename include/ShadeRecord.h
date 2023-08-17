@@ -3,7 +3,6 @@
 
 #include "Vector3.h"
 #include "Ray.h"
-#include "RGBColor.h"
 
 namespace pm {
 

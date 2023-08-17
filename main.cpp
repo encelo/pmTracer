@@ -43,15 +43,19 @@
 	#define PATH_TRACE (1)
 #endif
 
-const int width = 1280;
-const int height = 720;
-const int tileSize = 16;
-const unsigned int numSamples = 16;
+#define BINARY_PBM (1)
+
+const int Width = 1280;
+const int Height = 720;
+const int TileSize = 16;
+const unsigned int NumSamples = 16;
 
 void threadFunc(int id, int numThreads, pm::World &world, pm::Tracer &tracer, pm::Camera &camera, pm::RGBColor *frame)
 {
-	const int numColumns = (width / tileSize) + 1;
-	const int numRows = (height / tileSize) + 1;
+	const int width = world.viewPlane().width();
+	const int height = world.viewPlane().height();
+	const int numColumns = (width / TileSize) + 1;
+	const int numRows = (height / TileSize) + 1;
 
 	bool hasFinished = false;
 	int iteration = 0;
@@ -68,23 +72,31 @@ void threadFunc(int id, int numThreads, pm::World &world, pm::Tracer &tracer, pm
 			break;
 		}
 
-		const int startX = column * tileSize;
-		const int startY = row * tileSize;
-		const int tileSizeX = (startX + tileSize > width) ? width - startX : tileSize;
-		const int tileSizeY = (startY + tileSize > height) ? height - startY : tileSize;
+		const int startX = column * TileSize;
+		const int startY = row * TileSize;
+		const int tileSizeX = (startX + TileSize > width) ? width - startX : TileSize;
+		const int tileSizeY = (startY + TileSize > height) ? height - startY : TileSize;
 
 		camera.renderScene(world, tracer, frame, startX, startY, tileSizeX, tileSizeY);
 		iteration++;
 	}
 }
 
-void savePbm(const char *filename, pm::RGBColor *frame)
+void savePbm(const char *filename, pm::RGBColor *frame, const pm::ViewPlane &vp)
 {
-	const float invGamma = 1.0f / 2.2f;
+#if BINARY_PBM
+	const char *magicNumber = "P6";
+#else
+	const char *magicNumber = "P3";
+#endif
+
+	const int width = vp.width();
+	const int height = vp.height();
+	const float invGamma = vp.invGamma();
 
 	std::ofstream file;
 	file.open(filename);
-	file << "P3\n" << width << " " << height << "\n" << 255 << "\n";
+	file << magicNumber << "\n" << width << " " << height << "\n" << 255 << "\n";
 	for (int i = height - 1; i >= 0; i--)
 	{
 		for (int j = 0; j < width; j++)
@@ -96,11 +108,16 @@ void savePbm(const char *filename, pm::RGBColor *frame)
 			tonemapped = tonemapped / (pm::RGBColor(1.0f, 1.0f, 1.0f) + tonemapped);
 			tonemapped.pow(invGamma);
 
-			file << unsigned(tonemapped.r * 255) << " ";
-			file << unsigned(tonemapped.g * 255) << " ";
-			file << unsigned(tonemapped.b * 255) << " ";
+#if BINARY_PBM
+			const char out[3] = { char(tonemapped.r * 255), char(tonemapped.g * 255), char(tonemapped.b * 255) };
+			file.write(out, sizeof(out));
+		}
+#else
+			const unsigned int out[3] = { unsigned(tonemapped.r * 255), unsigned(tonemapped.g * 255), unsigned(tonemapped.b * 255) };
+			file << out[0] << " " << out[1] << " " << out[2] << " ";
 		}
 		file << "\n";
+#endif
 	}
 	file.close();
 }
@@ -113,13 +130,13 @@ std::unique_ptr<pm::Rectangle> rectangleFromVertices(const pm::Vector3 pA, const
 
 void setupWorld(pm::World &world)
 {
-	auto vpSampler = world.createSampler<pm::NRooks>(numSamples);
+	auto vpSampler = world.createSampler<pm::NRooks>(NumSamples);
 
-	world.viewPlane().setDimensions(width, height);
+	world.viewPlane().setDimensions(Width, Height);
 	world.viewPlane().setSampler(vpSampler);
 	world.viewPlane().editMaxDepth() = 5;
 
-	auto hammersley = world.createSampler<pm::Hammersley>(numSamples);
+	auto hammersley = world.createSampler<pm::Hammersley>(NumSamples);
 
 #if AMBIENT
 	auto ambient = std::make_unique<pm::Ambient>();
@@ -260,7 +277,7 @@ void setupCornellBox(pm::World &world)
 {
 	auto vpSampler = world.createSampler<pm::MultiJittered>(9);
 
-	world.viewPlane().setDimensions(width, height);
+	world.viewPlane().setDimensions(Width, Height);
 	world.viewPlane().setSampler(vpSampler);
 	world.viewPlane().editMaxDepth() = 5;
 
@@ -410,7 +427,7 @@ int main()
 	std::cout << "Setting up the scene...\n" << std::flush;
 	auto startTime = std::chrono::high_resolution_clock::now();
 
-	std::unique_ptr<pm::RGBColor[]> frame = std::make_unique<pm::RGBColor[]>(width * height);
+	std::unique_ptr<pm::RGBColor[]> frame = std::make_unique<pm::RGBColor[]>(Width * Height);
 
 	pm::World world;
 
@@ -486,9 +503,9 @@ int main()
 	std::cout << "Rendering time: ";
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms\n" << std::flush;
 
-	// Save output to PBM ascii format
+	// Save output to PBM binary or ascii format
 	startTime = std::chrono::high_resolution_clock::now();
-	savePbm("image.pbm", frame.get());
+	savePbm("image.pbm", frame.get(), world.viewPlane());
 	endTime = std::chrono::high_resolution_clock::now();
 	std::cout << "File save time: ";
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << "ms\n" << std::flush;

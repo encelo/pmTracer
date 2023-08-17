@@ -118,8 +118,8 @@ RGBColor Phong::pathShade(ShadeRecord &sr) const
 	const Vector3 wo = -sr.ray.d;
 	float pdf = 0.0f;
 	const RGBColor f = diffuseBrdf_.sampleF(sr, wo, wi, pdf);
-	float nDotWi = dot(sr.normal, wi);
-	Ray reflectedRay(sr.hitPoint, wi);
+	const float nDotWi = dot(sr.normal, wi);
+	const Ray reflectedRay(sr.hitPoint, wi);
 
 	return (f * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 1) * nDotWi / pdf);
 }

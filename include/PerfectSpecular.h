@@ -30,7 +30,7 @@ class PerfectSpecular : public BRDF
 inline RGBColor PerfectSpecular::sampleF(const ShadeRecord &sr, const Vector3 &wo, Vector3 &wi) const
 {
 	const float nDotWo = dot(sr.normal, wo);
-	wi = -wo + 2.0 * sr.normal * nDotWo;
+	wi = -wo + 2.0f * sr.normal * nDotWo;
 
 	return (kr_ * cr_ / dot(sr.normal, wi));
 }
@@ -38,7 +38,7 @@ inline RGBColor PerfectSpecular::sampleF(const ShadeRecord &sr, const Vector3 &w
 inline RGBColor PerfectSpecular::sampleF(const ShadeRecord &sr, const Vector3 &wo, Vector3 &wi, float &pdf) const
 {
 	const float nDotWo = dot(sr.normal, wo);
-	wi = -wo + 2.0 * sr.normal * nDotWo;
+	wi = -wo + 2.0f * sr.normal * nDotWo;
 	pdf = dot(sr.normal, wi);
 
 	return (kr_ * cr_);

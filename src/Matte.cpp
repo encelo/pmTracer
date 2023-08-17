@@ -99,7 +99,7 @@ RGBColor Matte::pathShade(ShadeRecord &sr) const
 	float pdf = 0.0f;
 	const RGBColor f = diffuseBrdf_.sampleF(sr, wo, wi, pdf);
 	const float nDotWi = dot(sr.normal, wi);
-	Ray reflectedRay(sr.hitPoint, wi);
+	const Ray reflectedRay(sr.hitPoint, wi);
 
 	return (f * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 1) * nDotWi / pdf);
 }
@@ -114,9 +114,9 @@ RGBColor Matte::globalShade(ShadeRecord &sr) const
 	Vector3 wi;
 	const Vector3 wo = -sr.ray.d;
 	float pdf = 0.0f;
-	RGBColor f = diffuseBrdf_.sampleF(sr, wo, wi, pdf);
+	const RGBColor f = diffuseBrdf_.sampleF(sr, wo, wi, pdf);
 	const float nDotWi = dot(sr.normal, wi);
-	Ray reflectedRay(sr.hitPoint, wi);
+	const Ray reflectedRay(sr.hitPoint, wi);
 
 	L += f * sr.tracer.traceRay(sr.world, reflectedRay, sr.depth + 1) * nDotWi / pdf;
 

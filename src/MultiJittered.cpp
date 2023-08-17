@@ -49,7 +49,7 @@ void MultiJittered::generateSamples(void)
 			{
 				// random integer between j and n - 1
 				const int unsigned k = static_cast<unsigned int>(rnd_.real() * (n - 1 - j) + j);
-				float t = samples_[j * n + i + p * numSamples_].y;
+				const float t = samples_[j * n + i + p * numSamples_].y;
 				samples_[j * n + i + p * numSamples_].y = samples_[k * n + i + p * numSamples_].y;
 				samples_[k * n + i + p * numSamples_].y = t;
 			}

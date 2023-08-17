@@ -33,7 +33,7 @@ void Hammersley::generateSamples()
 	{
 		for (unsigned int j = 0; j < numSamples_; j++)
 		{
-			Vector2 pv(static_cast<float>(j) / static_cast<float>(numSamples_), phi(j));
+			const Vector2 pv(static_cast<float>(j) / static_cast<float>(numSamples_), phi(j));
 			samples_.push_back(pv);
 		}
 	}

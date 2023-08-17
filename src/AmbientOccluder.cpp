@@ -1,7 +1,6 @@
 #include "AmbientOccluder.h"
 #include "Sampler.h"
 #include "World.h"
-#include "Regular.h"
 #include "Geometry.h"
 #include "Sampler.h"
 
@@ -9,7 +8,7 @@ namespace pm {
 
 AmbientOccluder::AmbientOccluder()
     : Light(Type::AMBIENT_OCCLUDER), u_(1.0f, 0.0f, 0.0f), v_(0.0f, 1.0f, 0.0f), w_(0.0f, 0.0f, 1.0f),
-      ls_(1.0f), color_(1.0f, 1.0f, 1.0f), minAmount_(1.0f)
+      ls_(1.0f), color_(1.0f, 1.0f, 1.0f), minAmount_(0.25f, 0.25f, 0.25f)
 {
 }
 

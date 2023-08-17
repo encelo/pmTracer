@@ -1,5 +1,4 @@
 #include "AreaLight.h"
-#include "Rectangle.h"
 #include "Emissive.h"
 #include "ShadeRecord.h"
 #include "World.h"

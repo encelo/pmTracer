@@ -13,7 +13,7 @@ void NRooks::generateSamples()
 	for (unsigned int p = 0; p < numSets_; p++)
 		for (unsigned int i = 0; i < numSamples_; i++)
 		{
-			Vector2 sp((i + rnd_.real()) / numSamples_, (i + rnd_.real()) / numSamples_);
+			const Vector2 sp((i + rnd_.real()) / numSamples_, (i + rnd_.real()) / numSamples_);
 			samples_.push_back(sp);
 		}
 

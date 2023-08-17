@@ -5,7 +5,7 @@ namespace pm {
 bool Plane::hit(const Ray &ray, float &tMin, ShadeRecord &sr) const
 {
 	bool hasHit = false;
-	float t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
+	const float t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
 
 	if (t > Epsilon)
 	{
@@ -25,7 +25,7 @@ bool Plane::shadowHit(const Ray &ray, float &tMin) const
 		return false;
 
 	bool hasHit = false;
-	float t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
+	const float t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
 
 	if (t > ShadowEpsilon)
 	{

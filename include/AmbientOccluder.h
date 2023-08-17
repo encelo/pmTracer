@@ -27,9 +27,10 @@ class AmbientOccluder : public Light
 	inline void setColor(const RGBColor &color) { color_ = color; }
 	inline void setColor(float r, float g, float b) { color_.set(r, g, b); }
 
-	inline const float &minAmount() const { return minAmount_; }
-	inline float &editMinAmount() { return minAmount_; }
-	inline void setMinAmount(float minAmount) { minAmount_ = minAmount; }
+	inline const RGBColor &minAmount() const { return minAmount_; }
+	inline RGBColor &editMinAmount() { return minAmount_; }
+	inline void setMinAmount(const RGBColor &minAmount) { minAmount_ = minAmount; }
+	inline void setMinAmount(float r, float g, float b) { minAmount_.set(r, g, b); }
 
 	inline const SamplerState &samplerState() const { return samplerState_; }
 
@@ -43,7 +44,7 @@ class AmbientOccluder : public Light
 
 	float ls_;
 	RGBColor color_;
-	float minAmount_;
+	RGBColor minAmount_;
 
 	SamplerState samplerState_;
 };

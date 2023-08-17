@@ -24,6 +24,7 @@ class ViewPlane
 	inline float &editPixelSize() { return pixelSize_; }
 	inline float gamma() const { return gamma_; }
 	void setGamma(float gamma);
+	inline float invGamma() const { return invGamma_; }
 	inline int maxDepth() const { return maxDepth_; }
 	inline int &editMaxDepth() { return maxDepth_; }
 

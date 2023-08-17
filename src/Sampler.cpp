@@ -1,9 +1,10 @@
 #include <limits>
 #include <algorithm>
+#include <random>
 #include "Sampler.h"
 
-const float pi = 3.14159265358979323846f;
-const float pi4 = 3.14159265358979323846f / 4.0f;
+const float pi = 3.14159265358979323846264338327950288f;
+const float pi4 = 0.785398163397448309615660845819875721f;
 
 namespace pm {
 
@@ -43,6 +44,9 @@ Vector3 Sampler::sampleHemisphere(unsigned long &count, int &jump)
 
 void Sampler::setupShuffleIndices()
 {
+	std::random_device rd;
+	std::mt19937 g(rd());
+
 	shuffledIndices_.reserve(numSamples_ * numSets_);
 	std::vector<unsigned int> indices;
 	indices.reserve(numSamples_);
@@ -52,7 +56,7 @@ void Sampler::setupShuffleIndices()
 
 	for (unsigned int p = 0; p < numSets_; p++)
 	{
-		std::random_shuffle(indices.begin(), indices.end());
+		std::shuffle(indices.begin(), indices.end(), g);
 
 		for (unsigned int i = 0; i < numSamples_; i++)
 			shuffledIndices_.push_back(indices[i]);
@@ -61,6 +65,9 @@ void Sampler::setupShuffleIndices()
 
 void Sampler::resize(unsigned int numSamples)
 {
+	// Set the new number first as some methods will use it internally
+	numSamples_ = numSamples;
+
 	samples_.clear();
 	diskSamples_.clear();
 	hemisphereSamples_.clear();
@@ -71,20 +78,20 @@ void Sampler::resize(unsigned int numSamples)
 	shuffledIndices_.clear();
 	setupShuffleIndices();
 
-	numSamples_ = numSamples;
+	mapSamplesToDisk();
 }
 
 void Sampler::mapSamplesToDisk()
 {
-	if (diskSamples_.empty() == false)
+	const size_t size = samples_.size();
+	if (diskSamples_.size() == size)
 		return;
 
-	const size_t size = samples_.size();
-	float r, phi;
-	Vector2 sp;
-
+	diskSamples_.clear();
 	diskSamples_.reserve(size);
 
+	float r, phi;
+	Vector2 sp;
 	for (unsigned int i = 0; i < size; i++)
 	{
 		// map sample point to [-1, 1]
@@ -113,7 +120,7 @@ void Sampler::mapSamplesToDisk()
 			if (sp.x < sp.y)
 			{
 				r = -sp.x;
-				phi = 4.0f * sp.y / sp.x;
+				phi = 4.0f + sp.y / sp.x;
 			}
 			// sector 4
 			else
@@ -136,10 +143,11 @@ void Sampler::mapSamplesToDisk()
 
 void Sampler::mapSamplesToHemisphere(float e)
 {
-	if (hemisphereSamples_.empty() == false)
+	const size_t size = samples_.size();
+	if (hemisphereSamples_.size() == size)
 		return;
 
-	const size_t size = samples_.size();
+	hemisphereSamples_.clear();
 	hemisphereSamples_.reserve(numSamples_ * numSets_);
 
 	for (unsigned int i = 0; i < size; i++)
