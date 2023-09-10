@@ -40,7 +40,7 @@ inline RGBColor Lambertian::f(const ShadeRecord &sr, const Vector3 &wo, const Ve
 inline RGBColor Lambertian::sampleF(const ShadeRecord &sr, const Vector3 &wo, Vector3 &wi, float &pdf) const
 {
 	const Vector3 w = sr.normal;
-	// up vector jittering
+	// jitter the up vector in case normal is vertical
 	Vector3 v = cross(Vector3(0.0034f, 1.0f, 0.0071f), w);
 	v.normalize();
 	const Vector3 u = cross(v, w);

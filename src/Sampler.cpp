@@ -148,7 +148,7 @@ void Sampler::mapSamplesToHemisphere(float e)
 		return;
 
 	hemisphereSamples_.clear();
-	hemisphereSamples_.reserve(numSamples_ * numSets_);
+	hemisphereSamples_.reserve(size);
 
 	for (unsigned int i = 0; i < size; i++)
 	{

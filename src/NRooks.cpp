@@ -26,9 +26,11 @@ void NRooks::shuffleXCoords()
 	for (unsigned int p = 0; p < numSets_; p++)
 		for (unsigned int i = 0; i < numSamples_ - 1; i++)
 		{
+			const int unsigned source = i + p * numSamples_ + 1;
 			const int unsigned target = rnd_.integer(0, numSamples_) + p * numSamples_;
-			const float temp = samples_[i + p * numSamples_ + 1].x;
-			samples_[i + p * numSamples_ + 1].x = samples_[target].x;
+
+			const float temp = samples_[source].x;
+			samples_[source].x = samples_[target].x;
 			samples_[target].x = temp;
 		}
 }
@@ -38,9 +40,11 @@ void NRooks::shuffleYCoords()
 	for (unsigned int p = 0; p < numSets_; p++)
 		for (unsigned int i = 0; i < numSamples_ - 1; i++)
 		{
+			const int unsigned source = i + p * numSamples_ + 1;
 			const unsigned int target = rnd_.integer(0, numSamples_) + p * numSamples_;
-			const float temp = samples_[i + p * numSamples_ + 1].y;
-			samples_[i + p * numSamples_ + 1].y = samples_[target].y;
+
+			const float temp = samples_[source].y;
+			samples_[source].y = samples_[target].y;
 			samples_[target].y = temp;
 		}
 }

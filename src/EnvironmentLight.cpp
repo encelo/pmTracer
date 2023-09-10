@@ -17,6 +17,7 @@ EnvironmentLight::EnvironmentLight(Emissive *material)
 Vector3 EnvironmentLight::direction(ShadeRecord &sr) const
 {
 	w_ = sr.normal;
+	// jitter the up vector in case normal is vertical
 	v_ = cross(Vector3(0.0034f, 1.0f, 0.0071f), w_);
 	v_.normalize();
 	u_ = cross(v_, w_);

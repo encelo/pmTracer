@@ -12,6 +12,7 @@ Rectangle::Rectangle()
 Rectangle::Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b)
     : Rectangle(point, a, b, cross(a, b))
 {
+	updateDimensions();
 }
 
 Rectangle::Rectangle(const Vector3 &point, const Vector3 &a, const Vector3 &b, const Vector3 &normal)
@@ -58,6 +59,9 @@ bool Rectangle::hit(const Ray &ray, float &tMin, ShadeRecord &sr) const
 
 bool Rectangle::shadowHit(const Ray &ray, float &tMin) const
 {
+	if (castShadows_ == false)
+		return false;
+
 	float t = dot((point_ - ray.o), normal_) / dot(ray.d, normal_);
 
 	if (t <= Epsilon)
